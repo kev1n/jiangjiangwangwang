@@ -75,6 +75,18 @@ def deleteFile():
     filename = request.args.get("filename")
     fileman.delete_file(filename, username)
 
+@app.route("/renameFile", methods=["GET"])
+def renameFile():
+    username = request.args.get("username")
+
+    if username != session["username"]:
+        return "Error: You do not have permission to delete this file"
+    
+    filename = request.args.get("filename")
+    newFilename = request.args.get("newFilename")
+    print(filename, newFilename)
+    fileman.rename_file(filename, newFilename, username)
+
 if __name__ == "__main__":
     app.debug = False
     app.run(port="7999")

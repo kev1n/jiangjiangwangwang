@@ -63,6 +63,12 @@ def rename_file(directory, old, new, username):
 
 def delete_file(filename, username):
     
-        ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; rm {filename}")
-    
-        return ssh_stdout.readlines()
+    ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; rm {filename}")
+
+    return ssh_stdout.readlines()
+
+def rename_file(old, new, username):
+
+    ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; mv {old} {new}")
+
+    return ssh_stdout.readlines()

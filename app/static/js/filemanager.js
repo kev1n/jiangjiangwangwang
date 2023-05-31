@@ -19,3 +19,12 @@ async function deleteFile(username, filename) {
 
     window.location.reload()
 }
+
+async function renameFile(username, filename) {
+    newFilename = document.getElementById("file-form-" + filename).value
+    console.log(newFilename)
+    //query /renameFile with get request, username, filename and newFilename in querystring
+    const response = await fetch(`/renameFile?username=${username}&filename=${filename}&newFilename=${newFilename}`);
+
+    window.location.reload()
+}

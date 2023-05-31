@@ -21,6 +21,11 @@
     {% for i in files %}
       <p onclick='getContentsOfFile("{{username}}", "{{i[:-1]}}")'>{{i}}</p>
       <button onclick='deleteFile("{{username}}", "{{i[:-1]}}")'>Delete</button>
+      <br>
+      <!-- rename the file form-->
+      <label for="rename">Rename</label>
+      <input type="text" id="file-form-{{i[:-1]}}" name="rename" placeholder="New Name">
+      <button onclick='renameFile("{{username}}", "{{i[:-1]}}")'>Rename</button>
     {% endfor %}
     <h1>Folders</h1>
     <p onclick='changeDirectory("{{username}}", "..")'>..</p>
