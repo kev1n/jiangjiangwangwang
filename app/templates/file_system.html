@@ -8,6 +8,7 @@
     <script src="/static/js/server.js"></script>
   </head>
   <link rel="stylesheet" href="/static/css/xterm.css" />
+  <link rel="stylesheet" href="/static/css/style.css" />
   <body>
     <button id="toggle-button" onclick="openTerminal(8000)">Open Terminal</button>
     <div width="500" height="500" id="terminal"></div>
@@ -32,6 +33,6 @@
     {% for i in folders %}
       <p onclick='changeDirectory("{{username}}", "{{i[:-1]}}")'>{{i}}</p>
     {% endfor %}
-    
+
   </body>
 </html>
