@@ -63,14 +63,38 @@
           terminalSpawnedAlready = true
         }
       };
+
+      async function getContentsOfFile(username, filename) {
+        //query /getFileData with get request, username and filename in querystring
+        
+        const response = await fetch(`/getFileData?username=${username}&filename=${filename}`);
+        const jsonData = await response.json();
+        alert(jsonData);
+
+
+      }
+
+      async function changeDirectory(username, directory) {
+        //query /cd with get request, username and directory in querystring
+        const response = await fetch(`/cd?username=${username}&directory=${directory}`);
+
+        window.location.reload()
+      }
     </script>
   </head>
   <link rel="stylesheet" href="/static/xterm.css" />
   <body>
     <button id="toggle-button" onclick="openTerminal(8000)">Open Terminal</button>
     <div width="500" height="500" id="terminal"></div>
+    <p>path: {{currentPath}}</p>
+    <h1>Files</h1>
     {% for i in files %}
-      <p>{{i}}</p>
+      <p onclick='getContentsOfFile("{{username}}", "{{i[:-1]}}")'>{{i}}</p>
+    {% endfor %}
+    <h1>Folders</h1>
+    <p onclick='changeDirectory("{{username}}", "..")'>..</p>
+    {% for i in folders %}
+      <p onclick='changeDirectory("{{username}}", "{{i[:-1]}}")'>{{i}}</p>
     {% endfor %}
     
   </body>
