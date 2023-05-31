@@ -44,6 +44,10 @@ def file_system():
 def getFileData():
     #get file data from server
     username = request.args.get("username")
+
+    if username != session["username"]:
+        return "Error: You do not have permission to delete this file"
+    
     filename = request.args.get("filename")
     
     data = fileman.cat_file(filename, username)
@@ -53,9 +57,23 @@ def getFileData():
 def cd():
     #change directory
     username = request.args.get("username")
+
+    if username != session["username"]:
+        return "Error: You do not have permission to delete this file"
+    
     directory = request.args.get("directory")
     fileman.cd(directory, username)
     return "Success"
+
+@app.route("/deleteFile", methods=["GET"])
+def deleteFile():
+    username = request.args.get("username")
+
+    if username != session["username"]:
+        return "Error: You do not have permission to delete this file"
+    
+    filename = request.args.get("filename")
+    fileman.delete_file(filename, username)
 
 if __name__ == "__main__":
     app.debug = False
