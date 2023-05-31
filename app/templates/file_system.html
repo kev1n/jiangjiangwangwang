@@ -5,10 +5,9 @@
     https://cdn.jsdelivr.net/npm/xterm@5.1.0/lib/xterm.min.js
     "></script>
     <script src="/static/js/filemanager.js"></script>
-    <script src="/static/js/server.js"></script>
+    <link rel="stylesheet" href="/static/css/xterm.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
   </head>
-  <link rel="stylesheet" href="/static/css/xterm.css" />
-  <link rel="stylesheet" href="/static/css/style.css" />
   <body>
     <button id="toggle-button" onclick="openTerminal(8000)">Open Terminal</button>
     <div width="500" height="500" id="terminal"></div>
@@ -34,5 +33,6 @@
       <p onclick='changeDirectory("{{username}}", "{{i[:-1]}}")'>{{i}}</p>
     {% endfor %}
 
+    <script src="/static/js/server.js"></script>
   </body>
 </html>
