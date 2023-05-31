@@ -17,9 +17,14 @@ def init_client(username, password):
     session["username"] = username
 
 def list_files(username):
-    
+
     ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command("ls -a")
 
     return ssh_stdout.readlines()
 
 
+def rename_file(directory, old, new, username):
+
+    ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command("mv " + directory + "/" + old + " " + directory + "/" + new)
+    
+    return ssh_stdout.readlines()
