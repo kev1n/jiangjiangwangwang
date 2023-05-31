@@ -62,7 +62,7 @@ def rename_file(directory, old, new, username):
     return ssh_stdout.readlines()
 
 def delete_file(filename, username):
-    
+
     ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; rm {filename}")
 
     return ssh_stdout.readlines()
@@ -70,5 +70,11 @@ def delete_file(filename, username):
 def rename_file(old, new, username):
 
     ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; mv {old} {new}")
+
+    return ssh_stdout.readlines()
+
+def create_file(filename, username, content):
+    
+    ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; touch {filename}; echo '{content}' > {filename}")
 
     return ssh_stdout.readlines()

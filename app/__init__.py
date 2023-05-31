@@ -40,52 +40,62 @@ def file_system():
         
     return render_template("file_system.html", username = session["username"], files = files, folders = folders, currentPath=individualPath, paths=paths)
 
-@app.route("/getFileData", methods=["GET"])
+@app.route("/getFileData", methods=["POST"])
 def getFileData():
     #get file data from server
-    username = request.args.get("username")
+    username = request.json["username"]
 
     if username != session["username"]:
         return "Error: You do not have permission to delete this file"
     
-    filename = request.args.get("filename")
+    filename = request.json["filename"]
     
     data = fileman.cat_file(filename, username)
     return data
 
-@app.route("/cd", methods=["GET"])
+@app.route("/cd", methods=["POST"])
 def cd():
-    #change directory
-    username = request.args.get("username")
+    username = request.json.get("username")
 
     if username != session["username"]:
         return "Error: You do not have permission to delete this file"
     
-    directory = request.args.get("directory")
+    directory = request.json["directory"]
     fileman.cd(directory, username)
     return "Success"
 
-@app.route("/deleteFile", methods=["GET"])
+@app.route("/deleteFile", methods=["POST"])
 def deleteFile():
-    username = request.args.get("username")
+    username = request.json["username"]
 
     if username != session["username"]:
         return "Error: You do not have permission to delete this file"
     
-    filename = request.args.get("filename")
+    filename = request.json["filename"]
     fileman.delete_file(filename, username)
 
-@app.route("/renameFile", methods=["GET"])
+@app.route("/renameFile", methods=["POST"])
 def renameFile():
-    username = request.args.get("username")
+    username = request.json["username"]
 
     if username != session["username"]:
         return "Error: You do not have permission to delete this file"
     
-    filename = request.args.get("filename")
-    newFilename = request.args.get("newFilename")
+    filename = request.json["filename"]
+    newFilename = request.json["newFilename"]
     print(filename, newFilename)
     fileman.rename_file(filename, newFilename, username)
+
+@app.route("/createFile", methods=["POST"])
+def createFile():
+    username = request.json["username"]
+
+    if username != session["username"]:
+        return "Error: You do not have permission to delete this file"
+    
+    filename = request.json["filename"]
+    content = request.json["content"]
+    fileman.create_file(filename, username, content)
 
 if __name__ == "__main__":
     app.debug = False

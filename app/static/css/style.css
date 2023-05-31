@@ -3,4 +3,5 @@ span:hover {
 }
 p:hover {
     color: blue;
+    cursor: pointer;
 }
