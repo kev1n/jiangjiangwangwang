@@ -38,7 +38,15 @@ def cat_file(file, username):
 
 def cd(directory, username):
     print(directory)
-    new_directory = client_directory[username] + "/" + directory
+
+    #when the path is an absolute path (starts with /), then cd to that path
+    #otherwise, cd to the current directory and then cd to the path
+    new_directory = ""
+    if directory[0] == "/":
+        new_directory = directory
+    else:
+        new_directory = client_directory[username] + "/" + directory
+
     print(new_directory)
     ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {new_directory}; pwd")
     client_directory[username] = ssh_stdout.readlines()[0][:-1]

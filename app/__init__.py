@@ -29,7 +29,16 @@ def file_system():
     files = fileman.list_files(session["username"])
     folders = fileman.list_folders(session["username"])
 
-    return render_template("file_system.html", username = session["username"], files = files, folders = folders, currentPath=fileman.currentPath(session["username"]))
+    individualPath = fileman.currentPath(session["username"]).split("/")
+
+    paths = []
+    for i in range(len(individualPath)):
+        totalpath = ""
+        for j in range(0, i + 1):
+            totalpath += individualPath[j] + "/"
+        paths.append(totalpath)
+        
+    return render_template("file_system.html", username = session["username"], files = files, folders = folders, currentPath=individualPath, paths=paths)
 
 @app.route("/getFileData", methods=["GET"])
 def getFileData():
