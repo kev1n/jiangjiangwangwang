@@ -107,3 +107,25 @@ async function createFile(username) {
 
     window.location.reload()
 }
+
+async function createDirectory(username) {
+    //query /createDirectory with post request, username and directory in body
+
+    const directory = document.getElementById("create-folder-name").value
+
+    const body = {
+        username: username,
+        directory: directory
+    }
+    
+    const response = await fetch(`/createDirectory`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify(body)
+        });
+
+    window.location.reload()
+}

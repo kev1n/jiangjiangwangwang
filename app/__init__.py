@@ -74,6 +74,8 @@ def deleteFile():
     filename = request.json["filename"]
     fileman.delete_file(filename, username)
 
+    return "Success"
+
 @app.route("/renameFile", methods=["POST"])
 def renameFile():
     username = request.json["username"]
@@ -83,8 +85,10 @@ def renameFile():
     
     filename = request.json["filename"]
     newFilename = request.json["newFilename"]
-    print(filename, newFilename)
+
     fileman.rename_file(filename, newFilename, username)
+
+    return "Success"
 
 @app.route("/createFile", methods=["POST"])
 def createFile():
@@ -97,6 +101,20 @@ def createFile():
     content = request.json["content"]
     fileman.create_file(filename, username, content)
 
+    return "Success"
+
+@app.route("/createDirectory", methods=["POST"])
+def createDirectory():
+    username = request.json["username"]
+
+    if username != session["username"]:
+        return "Error: You do not have permission to delete this file"
+    
+    foldername = request.json["directory"]
+    fileman.create_directory(foldername, username)
+
+    return "Success"
+    
 if __name__ == "__main__":
     app.debug = False
     app.run(port="7999")

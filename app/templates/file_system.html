@@ -36,6 +36,15 @@
       <button onclick='renameFile("{{username}}", "{{i[:-1]}}")'>Rename</button>
     {% endfor %}
     <h1>Folders</h1>
+
+
+    <h2>Create a folder</h2>
+    <label for="folder-form">Folder Name</label>
+    <input type="text" id="create-folder-name" placeholder="Folder Name">
+    <button onclick='createDirectory("{{username}}")'>Create Folder</button>
+
+
+
     <p onclick='changeDirectory("{{username}}", "..")'>..</p>
     {% for i in folders %}
       <p onclick='changeDirectory("{{username}}", "{{i[:-1]}}")'>{{i}}</p>
