@@ -37,6 +37,14 @@ def file_system():
         for j in range(0, i + 1):
             totalpath += individualPath[j] + "/"
         paths.append(totalpath)
+
+    #get rid of new line at the end of each file because it messes up the html
+    for i in range(len(files)):
+        files[i] = files[i][:-1]
+
+    for i in range(len(folders)):
+        folders[i] = folders[i][:-1]
+
         
     return render_template("file_system.html", username = session["username"], files = files, folders = folders, currentPath=individualPath, paths=paths)
 
@@ -99,6 +107,8 @@ def createFile():
     
     filename = request.json["filename"]
     content = request.json["content"]
+
+   
     fileman.create_file(filename, username, content)
 
     return "Success"

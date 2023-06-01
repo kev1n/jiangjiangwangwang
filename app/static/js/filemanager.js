@@ -16,6 +16,7 @@ async function getContentsOfFile(username, filename) {
         }
     );
     const jsonData = await response.json();
+    
     alert(jsonData);
 }
 
@@ -119,6 +120,52 @@ async function createDirectory(username) {
     }
     
     const response = await fetch(`/createDirectory`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify(body)
+        });
+
+    window.location.reload()
+}
+
+async function populateModalContents(username, filename) {
+    const body = {
+        username: username,
+        filename: filename
+    }
+    const response = await fetch(`/getFileData`, 
+        {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify(body)
+        }
+    );
+    const jsonData = await response.json();
+
+    var textarea = document.getElementById(`modal-${filename}-contents`)
+    console.log(textarea)
+    textarea.value = jsonData
+
+
+}
+
+async function editFile(username, filename) {
+    var textarea = document.getElementById(`modal-${filename}-contents`)
+    const content = textarea.value
+
+    const body = {
+        username: username,
+        filename: filename,
+        content: content
+    }
+    
+    const response = await fetch(`/createFile`, {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
