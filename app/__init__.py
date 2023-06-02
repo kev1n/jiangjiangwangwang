@@ -9,7 +9,7 @@ app.secret_key = os.urandom(12).hex()
 @app.route("/", methods=["GET"])
 def connectForm():
     #basic http form that takes in username and password
-    return render_template("connect.html")
+    return render_template("login.html")
 
 @app.route("/connect", methods=["POST"])
 def connect():
