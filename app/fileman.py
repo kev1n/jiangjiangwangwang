@@ -84,3 +84,9 @@ def create_directory(foldername, username):
     ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; mkdir {foldername}")
 
     return ssh_stdout.readlines()
+
+def search(filename, username):
+
+    ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; find ~ -name {filename} 2>/dev/null")
+
+    return ssh_stdout.readlines()

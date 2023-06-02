@@ -124,6 +124,18 @@ def createDirectory():
     fileman.create_directory(foldername, username)
 
     return "Success"
+
+@app.route("/search", methods=["POST"])
+def search():
+    username = request.form["username"]
+
+    if username != session["username"]:
+        return "Error: You do not have permission to delete this file"
+    
+    filename = request.form["filename"]
+    filepaths = fileman.search(filename, username)
+
+    return render_template("search.html", filename=filename, filepaths=filepaths)
     
 if __name__ == "__main__":
     app.debug = False

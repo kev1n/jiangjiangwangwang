@@ -20,6 +20,15 @@
       <span onclick='changeDirectory("{{username}}", "{{paths[loop.index - 1]}}")'>{{path}} > </span>
     {% endfor %}
 
+    <!--Search form-->
+    <h1>Search for a file</h1>
+    <form action="/search" method="POST">
+      <!--Invisible username-->
+      <input type="text" id="username" name="username" value="{{username}}" style="display: none;">
+      <label for="filename">Filename</label>
+      <input type="text" id="filename" name="filename" placeholder="Search">
+      <button type="submit">Search</button>
+    </form>
     <h1>Files</h1>
 
     <h2>Create a file</h2>
@@ -27,7 +36,7 @@
     <label for="file-form">File Name</label>
     <input type="text" id="create-file-name" placeholder="File Name">
     <button onclick='createFile("{{username}}")'>Create File</button>
-
+    
 
     {% for i in files %}
       <p onclick='getContentsOfFile("{{username}}", "{{i}}")'>{{i}}</p>
