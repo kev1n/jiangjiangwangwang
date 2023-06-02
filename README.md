@@ -18,3 +18,15 @@ Ian:
 Hui:
 * Front-end
 
+## Launch Codes
+```
+$ git clone https://github.com/kev1n/jiangjiangwangwang.git
+$ cd jiangjiangwangwang
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+$ npm i
+$ cd app
+$ python3 __init__.py
+```
+Open "localhost:7999" in your favorite browser
