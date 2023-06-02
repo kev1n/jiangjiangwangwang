@@ -74,10 +74,8 @@ def rename_file(old, new, username):
     return ssh_stdout.readlines()
 
 def create_file(filename, username, content):
-    print(f"cd {client_directory[username]}; touch {filename}; echo {content} > {filename}")
-    ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; touch {filename}; echo '{content}' > {filename}")
-    print(ssh_stdout.readlines())
-    print(ssh_stderr.readlines())
+    # we use hex to avoid issues with special characters
+    ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; echo '{content}' > temp && xxd -r -p temp > {filename}; rm temp")
 
     return ssh_stdout.readlines()
 

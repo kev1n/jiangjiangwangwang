@@ -1,3 +1,4 @@
+
 async function getContentsOfFile(username, filename) {
     //query /getFileData with get request, username and filename in querystring
 
@@ -91,12 +92,15 @@ async function createFile(username) {
     const content = document.getElementById("create-file").value
     const filename = document.getElementById("create-file-name").value
 
+    const contentAsHex = content.hexEncode()
 
     const body = {
         username: username,
         filename: filename,
-        content: content
+        content: contentAsHex
     }
+
+    
     const response = await fetch(`/createFile`, {
             method: "POST",
             headers: {
@@ -158,11 +162,13 @@ async function populateModalContents(username, filename) {
 async function editFile(username, filename) {
     var textarea = document.getElementById(`modal-${filename}-contents`)
     const content = textarea.value
+    //turn to hex
+    const contentAsHex = content.hexEncode()
 
     const body = {
         username: username,
         filename: filename,
-        content: content
+        content: contentAsHex
     }
     
     const response = await fetch(`/createFile`, {
@@ -175,4 +181,16 @@ async function editFile(username, filename) {
         });
 
     window.location.reload()
+}
+
+String.prototype.hexEncode = function(){
+    var hex, i;
+
+    var result = "";
+    for (i=0; i<this.length; i++) {
+        hex = this.charCodeAt(i).toString(16);
+        result += "0".repeat(2 - hex.length) + hex
+    }
+
+    return result
 }
