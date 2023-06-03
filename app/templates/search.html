@@ -8,7 +8,10 @@
         <p>We found a total of {{filepaths|length}} files</p>
         <p>Here are the files we found:</p>
         {% for i in filepaths %}
-            <p>{{i}}</p>
+            <p onclick='getContentsOfFile("{{username}}", "{{i}}")'>{{i}}</p>
         {% endfor %}
+        
+        <a href="/file_system">Go back to the file system</a>
     </body>
+    <script src="/static/js/filemanager.js"></script>
 </html>
