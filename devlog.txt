@@ -18,6 +18,13 @@ P5 - Ducky Drive
 ==============================================================
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
+DEVLOG FEEDBACK 6/2/23
+* Be more specific with what each file does in the Program List
+* Be more specific on how to open an ssh connection on the backend
+* Site Map needs to have more pages
+    - did not take this advice, we only need 2 pages (3 including search that was just added)
+* How do we handle upload/download & login if no user info is stored? (clarified in doc)
+* Idea taken from other groups: To do list with checkmarks
 
 Kevin Wang -- 6/1/23 19:00
 --------------------------------------------------------------
