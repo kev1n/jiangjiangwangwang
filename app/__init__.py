@@ -134,13 +134,13 @@ def search():
         return "Error: You do not have permission to delete this file"
     
     filename = request.form["filename"]
-    filepaths = fileman.search(filename, username)
+    files = fileman.search(filename, username)
 
     #get rid of new line at the end of each file because it messes up the html
-    for i in range(len(filepaths)):
-        filepaths[i] = filepaths[i][:-1]
+    for i in range(len(files)):
+        files[i] = files[i][:-1]
 
-    return render_template("search.html", username = session["username"], filename=filename, filepaths=filepaths)
+    return render_template("search.html", username = session["username"], filename=filename, files=files)
     
 if __name__ == "__main__":
     app.debug = False

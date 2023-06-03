@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>WebTerm</title>
+    <title>Ducky Drive</title>
     <script src="
     https://cdn.jsdelivr.net/npm/xterm@5.1.0/lib/xterm.min.js
     "></script>
@@ -37,41 +37,7 @@
     <input type="text" id="create-file-name" placeholder="File Name">
     <button onclick='createFile("{{username}}")'>Create File</button>
     
-
-    {% for i in files %}
-      <p onclick='getContentsOfFile("{{username}}", "{{i}}")'>{{i}}</p>
-      <button onclick='deleteFile("{{username}}", "{{i}}")'>Delete</button>
-      
-      <button onclick='populateModalContents("{{username}}", "{{i}}")' type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-{{i}}">Edit</button>
-      
-      <!-- Modal -->
-      <div class="modal fade" id="modal-{{i}}" tabindex="-1" aria-labelledby="modal-{{i}}Label" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modal-{{i}}Label">Modal title</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <!--We put the contents of the file in this textarea-->
-              <textarea id="modal-{{i}}-contents">
-
-              </textarea>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button onclick='editFile("{{username}}", "{{i}}")' type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <br>
-      <!-- rename the file form-->
-      <label for="rename">Rename</label>
-      <input type="text" id="file-form-{{i}}" name="rename" placeholder="New Name">
-      <button onclick='renameFile("{{username}}", "{{i}}")'>Rename</button>
-    {% endfor %}
+    {% include 'files.html' %}
     <h1>Folders</h1>
 
 
