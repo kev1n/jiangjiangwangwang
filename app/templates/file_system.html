@@ -38,6 +38,16 @@
     <button onclick='createFile("{{username}}")'>Create File</button>
     
     {% include 'files.html' %}
+
+    <!-- create form for file uploads-->
+    <h2>Upload a file</h2>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      <!--Invisible username-->
+      <input type="text" id="username" name="username" value="{{username}}" style="display: none;">
+      <input type="file" name="file" id="file">
+      <button type="submit">Upload</button>
+
+
     <h1>Folders</h1>
 
 

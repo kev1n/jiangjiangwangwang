@@ -6,6 +6,9 @@ import terminal
 app = Flask(__name__)
 app.secret_key = os.urandom(12).hex()
 
+uploads = os.path.dirname(os.path.realpath(__file__))
+app.config['UPLOAD_FOLDER'] = uploads
+
 @app.route("/", methods=["GET"])
 def connectForm():
     #basic http form that takes in username and password
@@ -142,6 +145,24 @@ def search():
 
     return render_template("search.html", username = session["username"], filename=filename, files=files)
     
+@app.route("/upload", methods=["POST"])
+def upload():
+    username = request.form["username"]
+
+    if username != session["username"]:
+        return "Error: You do not have permission to upload files"
+    
+    file = request.files["file"]
+    filename = file.filename
+
+    if filename == '':
+        return "No File Found"
+
+    content = file.read().hex()
+    fileman.upload(filename, username, content)
+
+    return "Success"
+
 if __name__ == "__main__":
     app.debug = False
     app.run(port="7999")
