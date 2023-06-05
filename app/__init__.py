@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, send_file
 import fileman
 import os
 import terminal
@@ -162,6 +162,18 @@ def upload():
     fileman.upload(filename, username, content)
 
     return "Success"
+
+@app.route("/download/<username>/<filename>", methods=["GET","POST"])
+def download(username, filename):
+    if username != session["username"]:
+        return "Error: You do not have permission to download files"
+    
+    content = fileman.cat_file(filename, username)
+    file = open(filename, "w")
+    for i in content:
+        file.write(i)
+    file.close()
+    return send_file(filename, as_attachment=True)
 
 if __name__ == "__main__":
     app.debug = False

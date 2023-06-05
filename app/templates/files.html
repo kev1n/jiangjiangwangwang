@@ -1,5 +1,8 @@
 {% for i in files %}
     <p onclick='getContentsOfFile("{{username}}", "{{i}}")'>{{i}}</p>
+
+    <a href='{{url_for("download", username=username, filename=i)}}' download>Download</a>
+
     <button onclick='deleteFile("{{username}}", "{{i}}")'>Delete</button>
 
     <button onclick='populateModalContents("{{username}}", "{{i}}")' type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-{{i}}">Edit</button>
