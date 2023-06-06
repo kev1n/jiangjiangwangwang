@@ -174,8 +174,8 @@ async function populateModalContents(username, filename) {
 }
 
 async function editFile(username, filename) {
-    var textarea = document.getElementById(`modal-${filename}-contents`)
-    const content = textarea.value
+    var editor = window.editor[`modal-${filename}-contents`]
+    const content = editor.getValue()
     //turn to hex
     const contentAsHex = content.hexEncode()
 
