@@ -136,6 +136,7 @@ async function createDirectory(username) {
 }
 
 async function populateModalContents(username, filename) {
+    
     const body = {
         username: username,
         filename: filename
@@ -151,11 +152,24 @@ async function populateModalContents(username, filename) {
         }
     );
     const jsonData = await response.json();
+    contentArea = document.getElementById(`modal-${filename}-contents`)
+    
+    //only create editor when it doesn't already exist
+    if (contentArea.childElementCount == 0) {
+        require(["vs/editor/editor.main"], () => {
+            window.editor[`modal-${filename}-contents`] = monaco.editor.create(contentArea, {
+              value: `${jsonData}`,
+              language: 'js',
+              theme: 'vs-light',
+              automaticLayout: true
+            });
+          });
+    } else {
+        window.editor[`modal-${filename}-contents`].setValue(`${jsonData}`)
+    }
 
-    var textarea = document.getElementById(`modal-${filename}-contents`)
-    console.log(textarea)
-    textarea.value = jsonData
-
+    
+    
 
 }
 
