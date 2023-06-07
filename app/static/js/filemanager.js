@@ -1,16 +1,3 @@
-String.prototype.hexEncode = function(){
-    var hex, i;
-
-    var result = "";
-    for (i=0; i<this.length; i++) {
-        hex = this.charCodeAt(i).toString(16);
-        result += "0".repeat(2 - hex.length) + hex
-    }
-
-    return result
-}
-
-
 async function getContentsOfFile(username, filename) {
     //query /getFileData with get request, username and filename in querystring
 
@@ -103,13 +90,11 @@ async function createFile(username) {
 
     const content = document.getElementById("create-file").value
     const filename = document.getElementById("create-file-name").value
-    console.log(content)
-    const contentAsHex = content.hexEncode()
 
     const body = {
         username: username,
         filename: filename,
-        content: contentAsHex
+        content: content
     }
 
     
@@ -209,13 +194,11 @@ async function populateModalContents(username, filename) {
 async function editFile(username, filename) {
     var editor = window.editor[`modal-${filename}-contents`]
     const content = editor.getValue()
-    //turn to hex
-    const contentAsHex = content.hexEncode()
 
     const body = {
         username: username,
         filename: filename,
-        content: contentAsHex
+        content: content
     }
     
     const response = await fetch(`/createFile`, {

@@ -117,10 +117,11 @@ def createFile():
         return "Error: You do not have permission to delete this file"
     
     filename = request.json["filename"]
-    content = request.json["content"]
 
-   
-    fileman.create_file(filename, username, content)
+    #turn content into a bytes like object before uploading
+    content = str.encode(request.json["content"])
+
+    fileman.upload(filename, username, content)
 
     return "Success"
 
