@@ -165,10 +165,10 @@ async function populateModalContents(username, filename) {
         }
     );
 
-    const jsonData = await response.json().join("");
-    console.log(jsonData)
+    let jsonData = await response.json();
+    jsonData = jsonData.join("")
+
     contentArea = document.getElementById(`modal-${filename}-contents`)
-    console.log(contentArea)
     //only create editor when it doesn't already exist
     if (contentArea.childElementCount == 0) {
 
