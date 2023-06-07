@@ -18,8 +18,7 @@
 
     <button id="toggle-button" onclick="openTerminal(8000)">Open Terminal</button>
     <div width="500" height="500" id="terminal"></div>
-    <div id="editor" style="width: 800px; height: 600px; border: 1px solid grey"></div>
-
+    
     <h1>Current Path</h1>
     {% for path in currentPath %}
       <span onclick='changeDirectory("{{username}}", "{{paths[loop.index - 1]}}")'>{{path}} > </span>

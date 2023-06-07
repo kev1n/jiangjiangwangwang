@@ -147,6 +147,7 @@ async function createDirectory(username) {
     window.location.reload()
 }
 
+window.editor = {}
 async function populateModalContents(username, filename) {
     
     const body = {
@@ -164,6 +165,7 @@ async function populateModalContents(username, filename) {
         }
     );
     const jsonData = await response.json();
+    console.log(jsonData)
     contentArea = document.getElementById(`modal-${filename}-contents`)
     console.log(contentArea)
     //only create editor when it doesn't already exist
