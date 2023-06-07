@@ -69,7 +69,7 @@ def getFileData():
     filename = request.json["filename"]
 
     data = fileman.cat_file(filename, username)
-
+    
     return data
 
 @app.route("/cd", methods=["POST"])
@@ -166,6 +166,7 @@ def upload():
         return "No File Found"
     if not allowed_file(filename):
         return "File Type Not Allowed"
+    
     content = file.read()
     fileman.upload(filename, username, content)
 

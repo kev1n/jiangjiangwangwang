@@ -28,8 +28,8 @@ async function getContentsOfFile(username, filename) {
             body: JSON.stringify(body)
         }
     );
-    const jsonData = await response.json();
-    
+    let jsonData = await response.json();
+    jsonData = jsonData.join("")
     alert(jsonData);
 }
 
