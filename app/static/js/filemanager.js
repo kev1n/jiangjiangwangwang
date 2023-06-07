@@ -164,7 +164,8 @@ async function populateModalContents(username, filename) {
             body: JSON.stringify(body)
         }
     );
-    const jsonData = await response.json();
+
+    const jsonData = await response.json().join("");
     console.log(jsonData)
     contentArea = document.getElementById(`modal-${filename}-contents`)
     console.log(contentArea)
