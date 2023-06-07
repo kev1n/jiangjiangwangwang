@@ -52,11 +52,10 @@ def file_system():
     #get rid of new line at the end of each file because it messes up the html
     for i in range(len(files)):
         files[i] = files[i][:-1]
-
     for i in range(len(folders)):
         folders[i] = folders[i][:-1]
 
-        
+    
     return render_template("file_system.html", username = session["username"], files = files, folders = folders, currentPath=individualPath, paths=paths)
 
 @app.route("/getFileData", methods=["POST"])

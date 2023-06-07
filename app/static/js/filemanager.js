@@ -1,3 +1,15 @@
+String.prototype.hexEncode = function(){
+    var hex, i;
+
+    var result = "";
+    for (i=0; i<this.length; i++) {
+        hex = this.charCodeAt(i).toString(16);
+        result += "0".repeat(2 - hex.length) + hex
+    }
+
+    return result
+}
+
 
 async function getContentsOfFile(username, filename) {
     //query /getFileData with get request, username and filename in querystring
@@ -91,7 +103,7 @@ async function createFile(username) {
 
     const content = document.getElementById("create-file").value
     const filename = document.getElementById("create-file-name").value
-
+    console.log(content)
     const contentAsHex = content.hexEncode()
 
     const body = {
@@ -136,6 +148,7 @@ async function createDirectory(username) {
 }
 
 async function populateModalContents(username, filename) {
+    
     const body = {
         username: username,
         filename: filename
@@ -151,17 +164,48 @@ async function populateModalContents(username, filename) {
         }
     );
     const jsonData = await response.json();
+    contentArea = document.getElementById(`modal-${filename}-contents`)
+    console.log(contentArea)
+    //only create editor when it doesn't already exist
+    if (contentArea.childElementCount == 0) {
 
-    var textarea = document.getElementById(`modal-${filename}-contents`)
-    console.log(textarea)
-    textarea.value = jsonData
+        require(["vs/editor/editor.main"], () => {
+            
+            monacoLanguages = monaco.languages.getLanguages()
 
+            language = "plaintext"
+
+            if (filename.split(".").length != 1) {
+                const extension = "." + filename.split(".")[1]
+                for (var i = 0; i < monacoLanguages.length; i++) {
+                    if (Array.isArray(monacoLanguages[i].extensions) == false) continue
+                    if (Array.from(monacoLanguages[i].extensions).includes(extension)) {
+                        language = monacoLanguages[i].id
+                        break
+                    }
+                }
+            }
+            
+            
+            window.editor[`modal-${filename}-contents`] = monaco.editor.create(contentArea, {
+              value: `${jsonData}`,
+              language: language,
+              theme: 'vs-light',
+              automaticLayout: true
+            });
+          });
+    } else {
+        window.editor[`modal-${filename}-contents`].setValue(`${jsonData}`)
+    }
+
+    
+    
 
 }
 
 async function editFile(username, filename) {
-    var textarea = document.getElementById(`modal-${filename}-contents`)
-    const content = textarea.value
+    var editor = window.editor[`modal-${filename}-contents`]
+    const content = editor.getValue()
     //turn to hex
     const contentAsHex = content.hexEncode()
 
@@ -183,14 +227,3 @@ async function editFile(username, filename) {
     window.location.reload()
 }
 
-String.prototype.hexEncode = function(){
-    var hex, i;
-
-    var result = "";
-    for (i=0; i<this.length; i++) {
-        hex = this.charCodeAt(i).toString(16);
-        result += "0".repeat(2 - hex.length) + hex
-    }
-
-    return result
-}
