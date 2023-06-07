@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, session, redirect, send_file
+from flask import Flask, render_template, request, session, redirect, send_file, Response
 import fileman
 import os
 import terminal
+import io
+import mimetypes
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12).hex()
@@ -168,10 +170,19 @@ def download(username, filename):
     if username != session["username"]:
         return "Error: You do not have permission to download files"
     
-    content = fileman.cat_file(filename, username)
-    file = open(filename, "w")
+    content = fileman.get_hex(filename, username)
+    file = open(filename, "wb")
     for i in content:
-        file.write(i)
+        file.write(bytes.fromhex(i))
+    # def generate():
+    #     for i in file:
+    #         yield i
+    # response = Response(generate(), mimetype=mimetypes.guess_type(filename)[0])
+    # response.headers.set("Content-Disposition", "attachment", filename=filename)
+    
+    # # file_path = str(filename)
+    # # os.remove(r""+file_path)
+    # return response
     file.close()
     return send_file(filename, as_attachment=True)
 

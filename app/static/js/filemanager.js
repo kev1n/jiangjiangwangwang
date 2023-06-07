@@ -194,3 +194,9 @@ String.prototype.hexEncode = function(){
 
     return result
 }
+
+// var download = document.getElementById("download");
+
+// var delete_temp = function() {
+
+// download.addEventListener("click", function());

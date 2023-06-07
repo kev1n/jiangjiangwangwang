@@ -1,7 +1,7 @@
 {% for i in files %}
     <p onclick='getContentsOfFile("{{username}}", "{{i}}")'>{{i}}</p>
 
-    <a href='{{url_for("download", username=username, filename=i)}}' download>Download</a>
+    <a href='{{url_for("download", username=username, filename=i)}}' download id="download">Download</a>
 
     <button onclick='deleteFile("{{username}}", "{{i}}")'>Delete</button>
 
