@@ -1,4 +1,3 @@
-
 async function getContentsOfFile(username, filename) {
     //query /getFileData with get request, username and filename in querystring
 
@@ -16,8 +15,8 @@ async function getContentsOfFile(username, filename) {
             body: JSON.stringify(body)
         }
     );
-    const jsonData = await response.json();
-    
+    let jsonData = await response.json();
+    jsonData = jsonData.join("")
     alert(jsonData);
 }
 
@@ -92,12 +91,10 @@ async function createFile(username) {
     const content = document.getElementById("create-file").value
     const filename = document.getElementById("create-file-name").value
 
-    const contentAsHex = content.hexEncode()
-
     const body = {
         username: username,
         filename: filename,
-        content: contentAsHex
+        content: content
     }
 
     
@@ -135,7 +132,9 @@ async function createDirectory(username) {
     window.location.reload()
 }
 
+window.editor = {}
 async function populateModalContents(username, filename) {
+    
     const body = {
         username: username,
         filename: filename
@@ -150,25 +149,56 @@ async function populateModalContents(username, filename) {
             body: JSON.stringify(body)
         }
     );
-    const jsonData = await response.json();
 
-    var textarea = document.getElementById(`modal-${filename}-contents`)
-    console.log(textarea)
-    textarea.value = jsonData
+    let jsonData = await response.json();
+    jsonData = jsonData.join("")
 
+    contentArea = document.getElementById(`modal-${filename}-contents`)
+    //only create editor when it doesn't already exist
+    if (contentArea.childElementCount == 0) {
+
+        require(["vs/editor/editor.main"], () => {
+            
+            monacoLanguages = monaco.languages.getLanguages()
+
+            language = "plaintext"
+
+            if (filename.split(".").length != 1) {
+                const extension = "." + filename.split(".")[1]
+                for (var i = 0; i < monacoLanguages.length; i++) {
+                    if (Array.isArray(monacoLanguages[i].extensions) == false) continue
+                    if (Array.from(monacoLanguages[i].extensions).includes(extension)) {
+                        language = monacoLanguages[i].id
+                        break
+                    }
+                }
+            }
+            
+            
+            window.editor[`modal-${filename}-contents`] = monaco.editor.create(contentArea, {
+              value: `${jsonData}`,
+              language: language,
+              theme: 'vs-light',
+              automaticLayout: true
+            });
+          });
+    } else {
+        window.editor[`modal-${filename}-contents`].setValue(`${jsonData}`)
+    }
+
+    
+    
 
 }
 
 async function editFile(username, filename) {
-    var textarea = document.getElementById(`modal-${filename}-contents`)
-    const content = textarea.value
-    //turn to hex
-    const contentAsHex = content.hexEncode()
+    var editor = window.editor[`modal-${filename}-contents`]
+    const content = editor.getValue()
 
     const body = {
         username: username,
         filename: filename,
-        content: contentAsHex
+        content: content
     }
     
     const response = await fetch(`/createFile`, {
@@ -183,20 +213,3 @@ async function editFile(username, filename) {
     window.location.reload()
 }
 
-String.prototype.hexEncode = function(){
-    var hex, i;
-
-    var result = "";
-    for (i=0; i<this.length; i++) {
-        hex = this.charCodeAt(i).toString(16);
-        result += "0".repeat(2 - hex.length) + hex
-    }
-
-    return result
-}
-
-// var download = document.getElementById("download");
-
-// var delete_temp = function() {
-
-// download.addEventListener("click", function());

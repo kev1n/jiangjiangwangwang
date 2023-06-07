@@ -2,6 +2,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "faye-websocket": "^0.11.4",
+    "monaco-editor": "^0.39.0",
     "ssh2": "^1.13.0",
     "term.js": "^0.0.7"
   }

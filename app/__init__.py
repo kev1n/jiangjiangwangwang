@@ -2,14 +2,20 @@ from flask import Flask, render_template, request, session, redirect, send_file,
 import fileman
 import os
 import terminal
-import io
-import mimetypes
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12).hex()
 
 uploads = os.path.dirname(os.path.realpath(__file__))
 app.config['UPLOAD_FOLDER'] = uploads
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','java','py','c','js','css','html','docx','zip','mp3','wav','mp4','ppt','rar','xls','pde'}
+
+def allowed_file(filename):
+    if filename.split(".") == None:
+        return True
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route("/", methods=["GET"])
 def connectForm():
@@ -23,7 +29,7 @@ def connect():
     username = request.form["username"]
     password = request.form["password"]
     
-    # terminal.startTerminal(username, password)
+    terminal.startTerminal(username, password)
     fileman.init_client(username, password)
     session["username"] = username
 
@@ -46,11 +52,10 @@ def file_system():
     #get rid of new line at the end of each file because it messes up the html
     for i in range(len(files)):
         files[i] = files[i][:-1]
-
     for i in range(len(folders)):
         folders[i] = folders[i][:-1]
 
-        
+    
     return render_template("file_system.html", username = session["username"], files = files, folders = folders, currentPath=individualPath, paths=paths)
 
 @app.route("/getFileData", methods=["POST"])
@@ -64,7 +69,7 @@ def getFileData():
     filename = request.json["filename"]
 
     data = fileman.cat_file(filename, username)
-
+    
     return data
 
 @app.route("/cd", methods=["POST"])
@@ -112,10 +117,11 @@ def createFile():
         return "Error: You do not have permission to delete this file"
     
     filename = request.json["filename"]
-    content = request.json["content"]
 
-   
-    fileman.create_file(filename, username, content)
+    #turn content into a bytes like object before uploading
+    content = str.encode(request.json["content"])
+
+    fileman.upload(filename, username, content)
 
     return "Success"
 
@@ -155,12 +161,14 @@ def upload():
         return "Error: You do not have permission to upload files"
     
     file = request.files["file"]
-    filename = file.filename
+    filename = secure_filename(file.filename)
 
     if filename == '':
         return "No File Found"
-
-    content = file.read().hex()
+    if not allowed_file(filename):
+        return "File Type Not Allowed"
+    
+    content = file.read()
     fileman.upload(filename, username, content)
 
     return "Success"

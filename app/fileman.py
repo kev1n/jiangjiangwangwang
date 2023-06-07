@@ -14,9 +14,16 @@ def init_client(username, password):
     server = "149.89.161.100"
 
     client.connect(server, username=username, password=password, sock=proxy)
+
+
     clients[username] = client
 
-    client_directory[username] = "~/"
+    ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command("pwd")
+    #print(ssh_stdout.readlines()[0][:-1])
+
+    client_directory[username] = ssh_stdout.readlines()[0][:-1]
+
+
 
 def list_files(username):
 
@@ -92,9 +99,18 @@ def search(filename, username):
     return ssh_stdout.readlines()
 
 def upload(filename, username, content):
-    ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; echo '{content}' > temp && xxd -r -p temp > {filename}; rm temp")
-
-    return ssh_stdout.readlines()
+    # print(filename)
+    # ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; echo '{content}' > temp && xxd -r -p temp > '{filename}'; rm temp")
+    ftp_client= clients[username].open_sftp()
+    localtemp = open(filename, "wb")
+    localtemp.write(content)
+    localtemp.close()
+    print("./"+filename)
+    print(client_directory[username]+"/"+filename)
+    ftp_client.put("./"+filename, client_directory[username]+r"/"+filename)
+    os.remove(filename)
+    ftp_client.close()
+    #return ssh_stdout.readlines()
 
 def get_hex(filename, username):
     ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; xxd -p {filename}")
