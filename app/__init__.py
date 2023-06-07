@@ -166,7 +166,7 @@ def upload():
         return "No File Found"
     if not allowed_file(filename):
         return "File Type Not Allowed"
-    content = file.read().hex()
+    content = file.read()
     fileman.upload(filename, username, content)
 
     return "Success"
