@@ -2,12 +2,20 @@ from flask import Flask, render_template, request, session, redirect
 import fileman
 import os
 import terminal
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12).hex()
 
 uploads = os.path.dirname(os.path.realpath(__file__))
 app.config['UPLOAD_FOLDER'] = uploads
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','java','py','c','js','css','html','docx','zip','mp3','wav','mp4','ppt','rar','xls','pde'}
+
+def allowed_file(filename):
+    if filename.split(".") == None:
+        return True
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route("/", methods=["GET"])
 def connectForm():
@@ -152,12 +160,13 @@ def upload():
         return "Error: You do not have permission to upload files"
     
     file = request.files["file"]
-    filename = file.filename
+    filename = secure_filename(file.filename)
 
     if filename == '':
         return "No File Found"
-
-    content = file.read().hex()
+    if not allowed_file(filename):
+        return "File Type Not Allowed"
+    content = file.read()
     fileman.upload(filename, username, content)
 
     return "Success"
