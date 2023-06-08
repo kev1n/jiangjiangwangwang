@@ -1,5 +1,6 @@
 const username = document.getElementById("username").innerHTML
 
+
 async function getContentsOfFile(filename) {
     //query /getFileData with get request, username and filename in querystring
 
@@ -135,6 +136,7 @@ async function createDirectory() {
 }
 
 window.editor = {}
+sockets = {}
 async function populateModalContents(filename) {
     
     const body = {
@@ -183,14 +185,55 @@ async function populateModalContents(filename) {
               theme: 'vs-light',
               automaticLayout: true
             });
+
+            var Socket = window.MozWebSocket || window.WebSocket;
+            socket = new Socket('ws://' + location.hostname + ':' + 8000);
+            sockets[filename] = socket
+            socket.onopen = async function() {
+            var term = new Terminal({
+                cols: 100,
+                rows: 50,
+                convertEol: true,
+                useStyle: true,
+                cursorBlink: true,
+                screenKeys: true
+            });
+
+            term.onData(function(data) {
+                socket.send(data);
+            });
+            
+            let qty = 0
+            term.onRender(function() {
+                qty++
+                if (qty == 4)
+                //we turn the filename into base64 to avoid dealing with special characters
+                socket.send(`tmux new-session -A -s ${btoa(filename)}\r`)
+            });
+
+            term.open(document.getElementById(`modal-${filename}-terminal`));
+
+            
+            socket.onmessage = function(event) {
+                term.write(event.data);   
+            };
+
+            socket.onclose = function() {
+                term.destroy();
+            };
+
+            };
           });
     } else {
         window.editor[`modal-${filename}-contents`].setValue(`${jsonData}`)
     }
 
-    
-    
+}
 
+function runCode(filename) {
+    socket = sockets[filename]
+    path = document.getElementById("current-path").innerHTML
+    socket.send(`python3 ${path}/${filename}\r`)
 }
 
 async function editFile(filename) {

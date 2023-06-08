@@ -14,12 +14,20 @@
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-{{i}}Label">Edit {{i}}</h5>
+                <button onclick='runCode("{{i}}")' id="run-{{i}}">Run</button>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!--We put the contents of the file in this textarea-->
-                <div id="modal-{{i}}-contents" style="height:400px;border:1px solid black;">
+                <div class="d=flex">
+                    <!--We put the contents of the file in this textarea-->
+                    <div id="modal-{{i}}-contents" style="height:400px;border:1px solid black;">
+
+                    </div>
+                    <div id="modal-{{i}}-terminal" style="height:400px;border:1px solid black;">
+
+                    </div>
                 </div>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

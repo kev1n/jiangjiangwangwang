@@ -12,11 +12,12 @@
   </head>
   <body>
     <p style="display:none" id="username">{{username}}</p>
+    <p style="display:none" id="current-path">{{currentPath}}</p>
     <button id="toggle-button" onclick="openTerminal(8000)">Open Terminal</button>
     <div width="500" height="500" id="terminal"></div>
     
     <h1>Current Path</h1>
-    {% for path in currentPath %}
+    {% for path in individualPaths %}
       <span onclick='changeDirectory("{{paths[loop.index - 1]}}")'>{{path}} > </span>
     {% endfor %}
 

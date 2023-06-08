@@ -40,13 +40,14 @@ def file_system():
     files = fileman.list_files(session["username"])
     folders = fileman.list_folders(session["username"])
 
-    individualPath = fileman.currentPath(session["username"]).split("/")
+    currentPath = fileman.currentPath(session["username"])
+    individualPaths = currentPath.split("/")
 
     paths = []
-    for i in range(len(individualPath)):
+    for i in range(len(individualPaths)):
         totalpath = ""
         for j in range(0, i + 1):
-            totalpath += individualPath[j] + "/"
+            totalpath += individualPaths[j] + "/"
         paths.append(totalpath)
 
     #get rid of new line at the end of each file because it messes up the html
@@ -59,7 +60,7 @@ def file_system():
     folders.insert(0, "..")
 
     
-    return render_template("file_system.html", username = session["username"], files = files, folders = folders, currentPath=individualPath, paths=paths)
+    return render_template("file_system.html", username = session["username"], files = files, folders = folders, individualPaths = individualPaths, paths=paths, currentPath=currentPath)
 
 @app.route("/getFileData", methods=["POST"])
 def getFileData():
