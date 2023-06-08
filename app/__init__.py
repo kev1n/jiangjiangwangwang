@@ -55,6 +55,9 @@ def file_system():
     for i in range(len(folders)):
         folders[i] = folders[i][:-1]
 
+    folders.insert(0, "~")
+    folders.insert(0, "..")
+
     
     return render_template("file_system.html", username = session["username"], files = files, folders = folders, currentPath=individualPath, paths=paths)
 
