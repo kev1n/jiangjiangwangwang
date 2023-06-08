@@ -105,12 +105,17 @@ def upload(filename, username, content):
     localtemp = open(filename, "wb")
     localtemp.write(content)
     localtemp.close()
-    print("./"+filename)
-    print(client_directory[username]+"/"+filename)
+
     ftp_client.put("./"+filename, client_directory[username]+r"/"+filename)
     os.remove(filename)
     ftp_client.close()
     #return ssh_stdout.readlines()
+
+def download(filename, username):
+    ftp_client= clients[username].open_sftp()
+    ftp_client.get(client_directory[username]+r"/"+filename, "./"+filename)
+    ftp_client.close()
+
 
 def get_hex(filename, username):
     ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; xxd -p {filename}")

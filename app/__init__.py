@@ -178,6 +178,7 @@ def download(username, filename):
     if username != session["username"]:
         return "Error: You do not have permission to download files"
     
+    """
     content = fileman.get_hex(filename, username)
     file = open(filename, "wb")
     for i in content:
@@ -192,6 +193,11 @@ def download(username, filename):
     # # os.remove(r""+file_path)
     # return response
     file.close()
+    os.remove(filename)
+    """
+
+    fileman.download(filename, username)
+
     return send_file(filename, as_attachment=True)
 
 if __name__ == "__main__":
