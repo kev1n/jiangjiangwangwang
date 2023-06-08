@@ -191,8 +191,6 @@ async function populateModalContents(filename) {
             sockets[filename] = socket
             socket.onopen = async function() {
             var term = new Terminal({
-                cols: 100,
-                rows: 50,
                 convertEol: true,
                 useStyle: true,
                 cursorBlink: true,
@@ -231,12 +229,22 @@ async function populateModalContents(filename) {
 }
 
 function runCode(filename) {
+    //this will save the changes first
+    editFile(filename, false)
+
     socket = sockets[filename]
+    //get the right extension
+    const extension = filename.split(".")[1]
     path = document.getElementById("current-path").innerHTML
-    socket.send(`python3 ${path}/${filename}\r`)
+
+    if (extension == "py") {
+        socket.send(`python3 ${path}/${filename}\r`)
+    } else if (extension == "java") {
+        socket.send(`javac ${path}/${filename}; java -cp ${path} ${filename.split(".")[0]}; rm ${path}/${filename.split(".")[0]}.class\r`)
+    }
 }
 
-async function editFile(filename) {
+async function editFile(filename, reload=true) {
     var editor = window.editor[`modal-${filename}-contents`]
     const content = editor.getValue()
 
@@ -254,8 +262,8 @@ async function editFile(filename) {
                 },
             body: JSON.stringify(body)
         });
-
-    window.location.reload()
+    
+    if (reload) window.location.reload()
 }
 
 async function moveFileToFolder(filename, foldername) {
