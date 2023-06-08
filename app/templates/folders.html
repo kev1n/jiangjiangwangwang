@@ -1,0 +1,7 @@
+<p onclick='changeDirectory("..")'>..</p>
+{% for i in folders %}
+    <div class="folder" width="100%" height="200px" style="border: 1px solid black" foldername="{{i}}">
+        <p onclick='changeDirectory("{{i}}")'>{{i}}</p>
+    </div>
+      
+{% endfor %}

@@ -208,6 +208,20 @@ def download(username, filename):
     
     return send_file(filename, as_attachment=True)
 
+@app.route("/moveFileToFolder", methods=["POST"])
+def moveFileToFolder():
+    username = request.json["username"]
+
+    if username != session["username"]:
+        return "Error: You do not have permission to move this file"
+    
+    filename = request.json["filename"]
+    foldername = request.json["foldername"]
+
+    fileman.move_file_to_folder(filename, foldername, username)
+
+    return "Success"
+
 if __name__ == "__main__":
     app.debug = False
     app.run(port="7999")

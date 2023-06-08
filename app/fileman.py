@@ -121,3 +121,8 @@ def get_hex(filename, username):
     ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; xxd -p {filename}")
 
     return ssh_stdout.readlines()
+
+def move_file_to_folder(filename, foldername, username):
+    ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; mv {filename} {foldername}")
+
+    return ssh_stdout.readlines()

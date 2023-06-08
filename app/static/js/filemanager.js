@@ -1,4 +1,6 @@
-async function getContentsOfFile(username, filename) {
+const username = document.getElementById("username").innerHTML
+
+async function getContentsOfFile(filename) {
     //query /getFileData with get request, username and filename in querystring
 
     const body = {
@@ -20,7 +22,7 @@ async function getContentsOfFile(username, filename) {
     alert(jsonData);
 }
 
-async function changeDirectory(username, directory) {
+async function changeDirectory(directory) {
     //query /cd with get request, username and directory in querystring
 
     const body = {
@@ -42,7 +44,7 @@ async function changeDirectory(username, directory) {
     window.location.reload()
 }
 
-async function deleteFile(username, filename) {
+async function deleteFile(filename) {
     //query /deleteFile with get request, username and filename in querystring
 
     const body = {
@@ -62,7 +64,7 @@ async function deleteFile(username, filename) {
     window.location.reload()
 }
 
-async function renameFile(username, filename) {
+async function renameFile(filename) {
     newFilename = document.getElementById("file-form-" + filename).value
 
     const body = {
@@ -85,7 +87,7 @@ async function renameFile(username, filename) {
     window.location.reload()
 }
 
-async function createFile(username) {
+async function createFile() {
     //query /createFile with get request, username and filename in querystring
 
     const content = document.getElementById("create-file").value
@@ -110,7 +112,7 @@ async function createFile(username) {
     window.location.reload()
 }
 
-async function createDirectory(username) {
+async function createDirectory() {
     //query /createDirectory with post request, username and directory in body
 
     const directory = document.getElementById("create-folder-name").value
@@ -133,7 +135,7 @@ async function createDirectory(username) {
 }
 
 window.editor = {}
-async function populateModalContents(username, filename) {
+async function populateModalContents(filename) {
     
     const body = {
         username: username,
@@ -191,7 +193,7 @@ async function populateModalContents(username, filename) {
 
 }
 
-async function editFile(username, filename) {
+async function editFile(filename) {
     var editor = window.editor[`modal-${filename}-contents`]
     const content = editor.getValue()
 
@@ -213,3 +215,21 @@ async function editFile(username, filename) {
     window.location.reload()
 }
 
+async function moveFileToFolder(filename, foldername) {
+    const body = {
+        username: username,
+        filename: filename,
+        foldername: foldername
+    }
+    
+    const response = await fetch(`/moveFileToFolder`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify(body)
+        });
+
+    window.location.reload()
+}
