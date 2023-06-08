@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, send_file, Response
+from flask import Flask, render_template, request, session, redirect, send_file, Response, after_this_request
 import fileman
 import os
 import terminal
@@ -198,6 +198,14 @@ def download(username, filename):
 
     fileman.download(filename, username)
 
+    @after_this_request
+    def remove_file(response):
+        try:
+            os.remove(filename)
+        except Exception as error:
+            app.logger.error("Error removing or closing downloaded file handle", error)
+        return response
+    
     return send_file(filename, as_attachment=True)
 
 if __name__ == "__main__":
