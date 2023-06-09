@@ -135,6 +135,49 @@ async function createDirectory() {
     window.location.reload()
 }
 
+async function deleteDirectory(directoryname) {
+    //query /deleteDirectory with get request, username and filename in querystring
+
+    const body = {
+        username: username,
+        directory: directoryname
+    }
+
+    const response = await fetch(`/deleteDirectory`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify(body)
+        });
+
+    window.location.reload()
+}
+
+async function renameDirectory(directoryname) {
+    newFilename = document.getElementById("file-form-" + filename).value
+
+    const body = {
+        username: username,
+        directoryname: directoryname,
+        newDirectoryname: newDirectoryname
+    }
+
+    console.log(newDirectoryname)
+    //query /renameFile with get request, username, filename and newFilename in querystring
+    const response = await fetch(`/renameDirectory`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify(body)
+        });
+
+    window.location.reload()
+}
+
 window.editor = {}
 sockets = {}
 async function populateModalContents(filename) {

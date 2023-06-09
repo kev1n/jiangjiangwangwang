@@ -1,6 +1,10 @@
 {% for i in folders %}
     <div class="folder" draggable="true" width="100%" height="200px" style="border: 1px solid black" foldername="{{i}}">
         <p onclick='changeDirectory("{{i}}")'>{{i}}</p>
+        <p onclick='deleteDirectory("{{i}}")'>Delete Directory</p>
+        <!-- <label for="rename">Rename</label>
+        <input type="text" id="folder-form-{{i}}" name="rename" placeholder="New Name">
+        <button onclick='renameDirectory("{{i}}")'>Rename</button> -->
     </div>
       
 {% endfor %}

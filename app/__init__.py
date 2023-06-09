@@ -29,7 +29,7 @@ def connect():
     username = request.form["username"]
     password = request.form["password"]
     
-    terminal.startTerminal(username, password)
+    #terminal.startTerminal(username, password)
     fileman.init_client(username, password)
     session["username"] = username
 
@@ -140,6 +140,33 @@ def createDirectory():
     fileman.create_directory(foldername, username)
 
     return "Success"
+
+@app.route("/deleteDirectory", methods=["POST"])
+def deleteDirectory():
+    username = request.json["username"]
+
+    if username != session["username"]:
+        return "Error: You do not have permission to delete this directory"
+    
+    directoryname = request.json["directory"]
+    fileman.delete_directory(directoryname, username)
+
+    return "Success"
+
+@app.route("/renameDirectory", methods=["POST"])
+def renameDirectory():
+    username = request.json["username"]
+
+    if username != session["username"]:
+        return "Error: You do not have permission to delete this file"
+    
+    filename = request.json["directoryname"]
+    newFilename = request.json["newDirectoryname"]
+
+    fileman.rename_file(filename, newFilename, username)
+
+    return "Success"
+
 
 @app.route("/search", methods=["POST"])
 def search():
