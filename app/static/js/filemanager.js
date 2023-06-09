@@ -66,7 +66,7 @@ async function deleteFile(filename) {
 }
 
 async function renameFile(filename) {
-    newFilename = document.getElementById("file-form-" + filename).value
+    let newFilename = document.getElementById("file-form-" + filename).value
 
     const body = {
         username: username,
@@ -155,16 +155,17 @@ async function deleteDirectory(directoryname) {
     window.location.reload()
 }
 
-async function renameDirectory(directoryname) {
-    newFilename = document.getElementById("file-form-" + filename).value
+async function renameDirectory(directoryName) {
+    let newDirectoryName = document.getElementById("folder-form-" + directoryName).value
 
     const body = {
         username: username,
-        directoryname: directoryname,
-        newDirectoryname: newDirectoryname
+        directoryName: directoryName,
+        newDirectoryName: newDirectoryName
     }
 
-    console.log(newDirectoryname)
+    console.log(newDirectoryName)
+    console.log(directoryName)
     //query /renameFile with get request, username, filename and newFilename in querystring
     const response = await fetch(`/renameDirectory`, {
             method: "POST",

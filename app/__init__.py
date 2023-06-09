@@ -160,9 +160,9 @@ def renameDirectory():
     if username != session["username"]:
         return "Error: You do not have permission to delete this file"
     
-    filename = request.json["directoryname"]
-    newFilename = request.json["newDirectoryname"]
-
+    filename = request.json["directoryName"]
+    newFilename = request.json["newDirectoryName"]
+    print(filename, newFilename)
     fileman.rename_file(filename, newFilename, username)
 
     return "Success"

@@ -132,3 +132,4 @@ def move_file_to_folder(filename, foldername, username):
     ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; mv {filename} {foldername}")
 
     return ssh_stdout.readlines()
+
