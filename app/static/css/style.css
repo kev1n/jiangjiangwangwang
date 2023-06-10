@@ -1,8 +1,47 @@
-span:hover {
-    background-color: gray;
+body {
+	overflow: hidden !important;
 }
-p:hover {
-    color: blue;
-    cursor: pointer;
+.navbar {
+  /* height: 7vh; */
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.logo {
+  height: 5vh;
+}
+.bottom {
+	height: 100vh !important;
+}
+.btn-white {
+  background-color: white !important;
+}
+.btn-white:hover {
+	background-color: lightgray !important;
+}
+.sidebar-menu {
+  list-style-type: none;
+  padding: 0;
+}
+.sidebar-item {
+  transition: background-color 0.3s;
+  color: black;
+  text-decoration: none;
+}
+.sidebar-item:hover {
+  background-color: #e9ecef;
+	cursor: pointer;
+}
+.main-container {
+	height: 91vh !important;
+}
+.card {
+	--bs-card-spacer-x: 0rem !important;
+}
+.btn-group {
+	width: 15.7% !important;
+}
+.file-card {
+	width: 15.7% !important;
 }
 

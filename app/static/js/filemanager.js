@@ -238,7 +238,8 @@ async function populateModalContents(filename) {
                 convertEol: true,
                 useStyle: true,
                 cursorBlink: true,
-                screenKeys: true
+                screenKeys: true,
+                automaticLayout: true
             });
 
             term.onData(function(data) {

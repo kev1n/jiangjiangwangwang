@@ -70,7 +70,7 @@ def file_system():
     folders.insert(0, "~")
     folders.insert(0, "..")
 
-    
+    individualPaths = individualPaths[1:]
     return render_template("file_system.html", username = session["username"], files = files, folders = folders, individualPaths = individualPaths, paths=paths, currentPath=currentPath)
 
 @app.route("/getFileData", methods=["POST"])

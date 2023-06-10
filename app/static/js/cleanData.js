@@ -28,3 +28,14 @@ for (let i = 0; i < buttons.length; i++) {
       button.setAttribute("data-bs-target", escapedTarget);
     }
   }
+
+// same treatment for a tag
+const aTags = document.getElementsByTagName("a");
+for (let i = 0; i < aTags.length; i++) {
+    const aTag = aTags[i];
+    if (aTag.hasAttribute("data-bs-target")) {
+        const aTagTarget = String(aTag.getAttribute("data-bs-target"));
+        const escapedTarget = "#" + escapeSpecialCharacters(aTagTarget.substring(1));
+        aTag.setAttribute("data-bs-target", escapedTarget);
+    }
+}
