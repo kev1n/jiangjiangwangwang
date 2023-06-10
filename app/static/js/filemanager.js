@@ -248,7 +248,8 @@ async function populateModalContents(filename) {
             let qty = 0
             term.onRender(function() {
                 qty++
-                if (qty == 4)
+                console.log(qty)
+                if (qty == 3)
                 //we turn the filename into base64 to avoid dealing with special characters
                 socket.send(`tmux new-session -A -s ${btoa(filename)}\r`)
             });

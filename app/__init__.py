@@ -3,9 +3,14 @@ import fileman
 import os
 import terminal
 from werkzeug.utils import secure_filename
+from itsdangerous import URLSafeTimedSerializer, BadTimeSignature
+from flask.sessions import session_json_serializer
+from hashlib import sha1
+import json
+import requests
 
 app = Flask(__name__)
-app.secret_key = os.urandom(12).hex()
+app.secret_key = os.urandom(50).hex()
 
 uploads = os.path.dirname(os.path.realpath(__file__))
 app.config['UPLOAD_FOLDER'] = uploads
@@ -29,9 +34,15 @@ def connect():
     username = request.form["username"]
     password = request.form["password"]
     
-    #terminal.startTerminal(username, password)
+    terminal.startTerminal(username, password)
     fileman.init_client(username, password)
     session["username"] = username
+
+    #send username and password to express app
+    req = requests.post(
+        "http://localhost:8000/authenticate",
+        json={"username": username, "password": password},
+    )
 
     return redirect("/file_system")
 
@@ -252,6 +263,24 @@ def moveFileToFolder():
     fileman.move_file_to_folder(filename, foldername, username)
 
     return "Success"
+
+@app.route('/verify_session/', methods=['POST'])
+def verify_session():
+    session_cookie = request.json["cookie"]
+    return str(readAndVerifyCookie(session_cookie))
+
+#https://gist.github.com/GioBonvi/b94278d0519dfa46f96f3de354efe269
+def readAndVerifyCookie(cookie):
+  signer = URLSafeTimedSerializer(
+    app.secret_key, salt="cookie-session",
+    serializer=session_json_serializer,
+    signer_kwargs={"key_derivation": "hmac", "digest_method": sha1}
+  )
+  try:
+    session_data = signer.loads(cookie)
+    return json.dumps(session_data)
+  except BadTimeSignature:
+    return {"username": None}
 
 if __name__ == "__main__":
     app.debug = False

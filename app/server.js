@@ -1,23 +1,66 @@
 var WebSocket = require('faye-websocket');
 var express = require('express');
 var app = express();
+app.use(express.json());
 var server = require('http').Server(app);
 var term = require('term.js');
 var { Client }   = require('ssh2');
 
-//get username and password args
-var args = process.argv.slice(2);
-var username = args[0];
-var password = args[1];
+var clientSSHConnection = {}
+// Regular HTTP routes
+app.post('/authenticate', (req, res) => {
+  //get username and password from request
+  var username = req.body.username;
+  var password = req.body.password;
+  
+  var conn = new Client();
+  conn.connect({
+    host: '149.89.161.100',
+    port: 22,
+    username: username,
+    password: password
+  })
 
-server.on('upgrade', function(request, socket, body) {
+  clientSSHConnection[username] = conn;
+  res.send({success: true});
+
+  
+});
+
+async function verifyCookie(cookie) {
+  const body = {
+    cookie: cookie
+  } 
+
+  const response = await fetch(`http://127.0.0.1:7999/verify_session`, 
+      {
+          method: "POST",
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          }, 
+          body: JSON.stringify(body)
+      }
+  );
+
+  return response.json();
+}
+
+server.on('upgrade', async function(request, socket, body) {
   if (WebSocket.isWebSocket(request)) {
-    var ws = new WebSocket(request, socket, body);
-    var conn;
-    ws.on('open', function() {
-        conn = new Client();
-      conn.on('ready', function() {
-        ws.write('\n*** SSH CONNECTION ESTABLISHED ***\n');
+    //get the session cookie from the raw header
+    var sessionCookie = request.rawHeaders.filter((header) => {
+      return header.includes('session=');
+    })[0].substring(8)
+
+    var response = await verifyCookie(sessionCookie);
+    var username = response["username"];
+  
+    if (username != "None") {
+      var ws = new WebSocket(request, socket, body);
+      var conn = clientSSHConnection[username];
+
+      ws.on('open', function() {
         conn.shell(function(err, stream) {
           if (err) {
             ws.write('\n*** SSH SHELL ERROR: ' + err.message + ' ***\n');
@@ -33,21 +76,12 @@ server.on('upgrade', function(request, socket, body) {
           stream.pipe(ws).pipe(stream).on('close', function() {
             conn.end();
           });
-        });
-      }).on('close', function() {
-        ws.write('\n*** SSH CONNECTION CLOSED ***\n');
-        ws.close();
-      }).connect({
-        host: '149.89.161.100',
-        port: 22,
-        username: username,
-        password: password
-      });
-    }).on('close', function(event) {
-      try {
-        conn && conn.end();
-      } catch (ex) {}
-    });
+        }
+      )}
+      )
+
+    }
+    
   }
 });
 

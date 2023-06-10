@@ -44,8 +44,6 @@ function openTerminal(port) {
 
         term.open(document.getElementById('terminal'));
 
-        term.write("\x1b[31mWelcome to the terminal!\x1b[m\r\n")
-        
         socket.onmessage = function(event) {
             term.write(event.data);
         };
