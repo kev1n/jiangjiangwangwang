@@ -11,6 +11,7 @@ import requests
 
 app = Flask(__name__)
 app.secret_key = os.urandom(50).hex()
+terminal.startTerminal()
 
 uploads = os.path.dirname(os.path.realpath(__file__))
 app.config['UPLOAD_FOLDER'] = uploads
@@ -34,7 +35,6 @@ def connect():
     username = request.form["username"]
     password = request.form["password"]
     
-    terminal.startTerminal(username, password)
     fileman.init_client(username, password)
     session["username"] = username
 

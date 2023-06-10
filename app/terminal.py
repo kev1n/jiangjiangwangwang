@@ -1,6 +1,6 @@
 from subprocess import Popen
 import atexit
 
-def startTerminal(username, password):
+def startTerminal():
     print("starting websocket server")
-    server = Popen(["node", "./server.js"])
+    Popen(["node", "./server.js"])
