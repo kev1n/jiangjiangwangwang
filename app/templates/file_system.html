@@ -57,7 +57,7 @@
           </button>
           <hr>
           <button class="btn btn-warning shadow-sm border p-2 container-fluid" type="button" id="toggle-button" onclick="openTerminal(8000)">
-            Terminal
+            Open Terminal
           </button>
           <hr>
           <ul class="dropdown-menu">
@@ -134,13 +134,8 @@
 
       <div class="card col-md-11 col-sm-9 container-fluid main-container overflow-scroll d-flex">
         <div class="card-body p-1 d-flex">
-          <div>
-            
-            {% for path in individualPaths %}
-            <span onclick='changeDirectory("{{paths[loop.index]}}")'
-              >{{path}} >
-            </span>
-            {% endfor %}
+          <div id="sidebar">
+            <div id="dragbar"></div>
             <div class="card-body overflow-auto">
               <!-- folders -->
               {% include 'folders.html' %}
@@ -149,8 +144,8 @@
             </div>
           </div>
           
-          <div style="width: 350px; display: none" id="terminal-container">
-            <div id="terminal" class="terminal"></div>
+          <div style="display: none" id="terminal-container">
+            <div style="resize: horizontal; overflow:auto" id="terminal" class="terminal"></div>
           </div>
           
         </div>
@@ -161,12 +156,6 @@
 
     <p style="display: none" id="username">{{username}}</p>
     <p style="display: none" id="current-path">{{currentPath}}</p>
-    <h1>Current Path</h1>
-    {% for path in individualPaths %}
-    <span onclick='changeDirectory("{{paths[loop.index - 1]}}")'
-      >{{path}} >
-    </span>
-    {% endfor %}
 
     <!--Search form-->
     <h1>Search for a file</h1>
@@ -185,13 +174,6 @@
       <input type="file" name="file" id="file" />
       <button type="submit">Upload</button>
     </form>
-
-    <h1>Folders</h1>
-
-    <h2>Create a folder</h2>
-    <label for="folder-form">Folder Name</label>
-    <input type="text" id="create-folder-name" placeholder="Folder Name" />
-    <button onclick="createDirectory()">Create Folder</button>
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -218,5 +200,6 @@
     <script src="/static/js/server.js"></script>
     <script src="../static/js/cleanData.js"></script>
     <script src="../static/js/dragging.js"></script>
+    <script src="../static/js/dragbar.js"></script>
   </body>
 </html>

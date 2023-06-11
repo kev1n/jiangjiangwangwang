@@ -235,6 +235,8 @@ async function populateModalContents(filename) {
             sockets[filename] = socket
             socket.onopen = async function() {
             var term = new Terminal({
+                cols: 100,
+                rows: 50,
                 convertEol: true,
                 useStyle: true,
                 cursorBlink: true,
