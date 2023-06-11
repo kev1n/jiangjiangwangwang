@@ -45,3 +45,14 @@ body {
 	width: 15.7% !important;
 }
 
+/* For editing*/
+.root {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+}
+
+.monoco-container {
+  flex: 1;
+  min-width: 0;
+}

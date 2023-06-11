@@ -242,6 +242,10 @@ async function populateModalContents(filename) {
                 automaticLayout: true
             });
 
+            f = new FitAddon.FitAddon();
+
+            term.loadAddon(f);
+
             term.onData(function(data) {
                 socket.send(data);
             });
@@ -256,7 +260,7 @@ async function populateModalContents(filename) {
             });
 
             term.open(document.getElementById(`modal-${filename}-terminal`));
-
+            f.fit();
             
             socket.onmessage = function(event) {
                 term.write(event.data);   
