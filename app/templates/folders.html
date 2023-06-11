@@ -29,21 +29,21 @@
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference">
         <li>
+            <!--Rename should open a bootstrap modal-->
+  
+            <!-- Button trigger modal -->
+  
+            <a
+              data-bs-toggle="modal"
+              data-bs-target="#rename-{{i[:-1]}}"
+              class="dropdown-item"
+            >
+              Rename
+            </a>
+          </li>
+        <li>
           <a onclick='deleteDirectory("{{i}}")' class="dropdown-item" href="#">
             Delete
-          </a>
-        </li>
-        <li>
-          <!--Rename should open a bootstrap modal-->
-
-          <!-- Button trigger modal -->
-
-          <a
-            data-bs-toggle="modal"
-            data-bs-target="#rename-{{i[:-1]}}"
-            class="dropdown-item"
-          >
-            Rename
           </a>
         </li>
       </ul>

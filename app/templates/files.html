@@ -16,6 +16,17 @@
           ><b>{{i}}</b></a
         >
         <ul class="dropdown-menu">
+            <!--Edit-->
+          <li>
+            <a
+              onclick='populateModalContents("{{i}}")'
+              class="dropdown-item"
+              data-bs-toggle="modal"
+              data-bs-target="#modal-{{i}}"
+            >
+              Edit
+            </a>
+          </li>
           <!--Download-->
           <li>
             <a
@@ -26,22 +37,8 @@
               >Download</a
             >
           </li>
-          <li>
-            <a
-              onclick='populateModalContents("{{i}}")'
-              type="button"
-              class="btn btn-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#modal-{{i}}"
-            >
-              Edit
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item" onclick='deleteFile("{{i}}")'>Delete</a>
-          </li>
-          <!--Rename-->
-          <li>
+           <!--Rename-->
+           <li>
             <a
               data-bs-toggle="modal"
               data-bs-target="#rename-{{i}}"
@@ -50,6 +47,11 @@
               Rename
             </a>
           </li>
+            <!--Delete-->
+          <li>
+            <a class="dropdown-item" onclick='deleteFile("{{i}}")'>Delete</a>
+          </li>
+         
         </ul>
       </div>
       <img
@@ -138,6 +140,7 @@
               <!--We put the terminal in this div-->
               <div style="width: 400px; height: 100%">
                 <div
+                    class="terminal"
                   id="modal-{{i}}-terminal"
                   style="border: 1px solid black; height: 100%"
                 ></div>

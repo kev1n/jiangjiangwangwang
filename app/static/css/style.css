@@ -56,3 +56,7 @@ body {
   flex: 1;
   min-width: 0;
 }
+/* styling terminal*/
+.xterm {
+  padding: 10px;
+}

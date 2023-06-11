@@ -4,131 +4,219 @@
     <link rel="stylesheet" href="/static/css/xterm.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
     <!--import bootstrap cdn-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link href="
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <link
+      href="
     https://cdn.jsdelivr.net/npm/monaco-editor@0.39.0/dev/vs/editor/editor.main.min.css
-    " rel="stylesheet">
-
+    "
+      rel="stylesheet"
+    />
   </head>
   <body>
+    <!-- navbar -->
+    <nav class="navbar bg-light">
+      <div class="container-fluid d-flex">
+        <a class="navbar-brand" href="#">
+          <img
+            src="https://img.freepik.com/free-icon/rubber-duck_318-763202.jpg"
+            class="logo"
+          />
+          Drive
+        </a>
+        <form class="d-flex w-50">
+          <input
+            class="form-control rounded"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+        </form>
+        <div class="rounded p-1">{{username}}</div>
+      </div>
+    </nav>
 
-    <body>
-      <!-- navbar -->
-      <nav class="navbar bg-light">
-        <div class="container-fluid d-flex">
-          <a class="navbar-brand" href="#">
-            <img src="https://img.freepik.com/free-icon/rubber-duck_318-763202.jpg" class="logo"> Drive
-          </a>
-          <form class="d-flex w-50">
-            <input class="form-control rounded" type="search" placeholder="Search" aria-label="Search">
-          </form>
-          <div class="rounded p-1">
-            {{username}}
-          </div>
-        </div>
-      </nav>
-      
-      <!-- bottom -->
-      <div class="container-fluid row bottom">
-        <!-- sidebar -->
-        <div class="sidebar col-md-2 col-sm-3 bg-light h-100">
-          <!-- + new button -->
+    <!-- bottom -->
+    <div class="container-fluid row bottom">
+      <!-- sidebar -->
+      <div class="sidebar col-md-1 col-sm-3 bg-light h-100">
+        <!-- + new button -->
 
-          <div class="dropdown mt-3">
-            <button class="btn btn-white shadow-sm border dropdown-toggle p-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">+ New</button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">New File</a></li>
-              <li><a class="dropdown-item" href="#">New Folder</a></li>
-              <li><a class="dropdown-item" href="#">Upload File</a></li>
-            </ul>
-          </div>
-          <!-- sidebar menu -->
-          <ul class="mt-3 sidebar-menu">
-            
-              {% for path in individualPaths %}
-                <a onclick='changeDirectory("{{paths[loop.index]}}")' href="#" class="text-decoration-none">
-                <li class="sidebar-item rounded px-1 mb-1 pb-1 pt-3">
-                  <p>{{path}}</p>
-                </li>
-              </a>
-              {% endfor %}
+        <div class="dropdown mt-3">
+          <button
+            class="btn btn-white shadow-sm border dropdown-toggle p-2 container-fluid"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            + New
+          </button>
+          <hr>
+          <button class="btn btn-warning shadow-sm border p-2 container-fluid" type="button" id="toggle-button" onclick="openTerminal(8000)">
+            Terminal
+          </button>
+          <hr>
+          <ul class="dropdown-menu">
+            <li><a onclick='openEditorForFileCreation()' class="dropdown-item" data-bs-toggle="modal" data-bs-target="#newfile">New File</a></li>
+            <li><a class="dropdown-item" href="#">New Folder</a></li>
+            <li><a class="dropdown-item" href="#">Upload File</a></li>
           </ul>
         </div>
-        <!-- main content -->
-        
-        <div class="card col-md-10 col-sm-9 container-fluid main-container">
-          <div class="card-body p-1">
+
+        <!--Modal for creating new file-->
+        <!-- Renaming Modal -->
+        <div
+          id="newfile"
+          class="modal fade"
+          tabindex="-1"
+          aria-labelledby="newfilelabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="newfilelabel">Create new file</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body overflow-hidden">
+                <!--Monoco Editor-->
+                <label for="file-form">File Name</label>
+                <input type="text" id="create-file-name" placeholder="File Name" />
+                <br>
+                <div id="create-file-editor" style="border: 1px solid black; height:100%"></div>
+
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  onclick='createFile()'
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-dismiss="modal"
+                >
+                  Create new file
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- sidebar menu -->
+        <ul class="mt-3 sidebar-menu">
+          {% for path in individualPaths %}
+          <a
+            onclick='changeDirectory("{{paths[loop.index]}}")'
+            href="#"
+            class="text-decoration-none"
+          >
+            <li class="sidebar-item rounded px-1 mb-1 pb-1 pt-3">
+              <p>{{path}}</p>
+            </li>
+          </a>
+          {% endfor %}
+        </ul>
+      </div>
+      <!-- main content -->
+
+      <div class="card col-md-11 col-sm-9 container-fluid main-container overflow-scroll d-flex">
+        <div class="card-body p-1 d-flex">
+          <div>
+            
             {% for path in individualPaths %}
-              <span onclick='changeDirectory("{{paths[loop.index]}}")'>{{path}} > </span>
+            <span onclick='changeDirectory("{{paths[loop.index]}}")'
+              >{{path}} >
+            </span>
             {% endfor %}
             <div class="card-body overflow-auto">
               <!-- folders -->
               {% include 'folders.html' %}
-              <br>
+              <br />
               {% include 'files.html' %}
             </div>
           </div>
+          
+          <div style="width: 350px; display: none" id="terminal-container">
+            <div id="terminal" class="terminal"></div>
+          </div>
+          
+        </div>
+
         </div>
       </div>
+    </div>
 
-    <p style="display:none" id="username">{{username}}</p>
-    <p style="display:none" id="current-path">{{currentPath}}</p>
-    <button id="toggle-button" onclick="openTerminal(8000)">Open Terminal</button>
-    <div width="500" height="500" id="terminal"></div>
-    
+    <p style="display: none" id="username">{{username}}</p>
+    <p style="display: none" id="current-path">{{currentPath}}</p>
     <h1>Current Path</h1>
     {% for path in individualPaths %}
-      <span onclick='changeDirectory("{{paths[loop.index - 1]}}")'>{{path}} > </span>
+    <span onclick='changeDirectory("{{paths[loop.index - 1]}}")'
+      >{{path}} >
+    </span>
     {% endfor %}
 
     <!--Search form-->
     <h1>Search for a file</h1>
     <form action="/search" method="POST">
       <label for="filename">Filename</label>
-      <input type="text" id="filename" name="filename" placeholder="Search">
+      <input type="text" id="filename" name="filename" placeholder="Search" />
       <button type="submit">Search</button>
     </form>
     <h1>Files</h1>
 
-    <h2>Create a file</h2>
-    <textarea width="500" height="500" id="create-file"></textarea>
-    <label for="file-form">File Name</label>
-    <input type="text" id="create-file-name" placeholder="File Name">
-    <button onclick='createFile()'>Create File</button>
-    
     {% include 'files.html' %}
 
     <!-- create form for file uploads-->
     <h2>Upload a file</h2>
     <form action="/upload" method="POST" enctype="multipart/form-data">
-      <input type="file" name="file" id="file">
+      <input type="file" name="file" id="file" />
       <button type="submit">Upload</button>
     </form>
 
     <h1>Folders</h1>
 
-
     <h2>Create a folder</h2>
     <label for="folder-form">Folder Name</label>
-    <input type="text" id="create-folder-name" placeholder="Folder Name">
-    <button onclick='createDirectory()'>Create Folder</button>
-  
-  
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <input type="text" id="create-folder-name" placeholder="Folder Name" />
+    <button onclick="createDirectory()">Create Folder</button>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+      integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+      crossorigin="anonymous"
+    ></script>
     <script src="
     https://cdn.jsdelivr.net/npm/xterm@5.1.0/lib/xterm.min.js
     "></script>
     <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.7.0/lib/xterm-addon-fit.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+      integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+      crossorigin="anonymous"
+    ></script>
     <!-- OR ANY OTHER AMD LOADER HERE INSTEAD OF loader.js -->
-		<script src="https://unpkg.com/monaco-editor@0.39.0/min/vs/loader.js"></script>
+    <script src="https://unpkg.com/monaco-editor@0.39.0/min/vs/loader.js"></script>
     <script>
-      require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@0.39.0/min/vs/' }});
+      require.config({
+        paths: { vs: "https://unpkg.com/monaco-editor@0.39.0/min/vs/" },
+      });
     </script>
     <script src="/static/js/filemanager.js"></script>
     <script src="/static/js/server.js"></script>
     <script src="../static/js/cleanData.js"></script>
     <script src="../static/js/dragging.js"></script>
-    
   </body>
 </html>

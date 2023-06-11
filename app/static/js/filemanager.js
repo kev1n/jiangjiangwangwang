@@ -91,8 +91,9 @@ async function renameFile(filename) {
 async function createFile() {
     //query /createFile with get request, username and filename in querystring
 
-    const content = document.getElementById("create-file").value
+    const content = window.editor["create-file-editor"].getValue()
     const filename = document.getElementById("create-file-name").value
+
 
     const body = {
         username: username,
@@ -221,8 +222,7 @@ async function populateModalContents(filename) {
                     }
                 }
             }
-            
-            
+
             window.editor[`modal-${filename}-contents`] = monaco.editor.create(contentArea, {
               value: `${jsonData}`,
               language: language,
@@ -242,7 +242,7 @@ async function populateModalContents(filename) {
                 automaticLayout: true
             });
 
-            f = new FitAddon.FitAddon();
+            var f = new FitAddon.FitAddon();
 
             term.loadAddon(f);
 
@@ -250,20 +250,29 @@ async function populateModalContents(filename) {
                 socket.send(data);
             });
             
+            /*
             let qty = 0
             term.onRender(function() {
                 qty++
-                console.log(qty)
+                //console.log(qty)
                 if (qty == 3)
                 //we turn the filename into base64 to avoid dealing with special characters
                 socket.send(`tmux new-session -A -s ${btoa(filename)}\r`)
-            });
+            });*/
 
             term.open(document.getElementById(`modal-${filename}-terminal`));
             f.fit();
             
+            term.finishedLoading = false
             socket.onmessage = function(event) {
-                term.write(event.data);   
+                console.log(event.data)
+                console.log(event.data.includes(username))
+                term.write(event.data);
+                if (!term.finishedLoading && event.data.includes(username)) {
+                    term.finishedLoading = true
+                    socket.send(`tmux new-session -A -s ${btoa(filename)}\r`)
+                    f.fit();
+                }
             };
 
             socket.onclose = function() {
@@ -333,4 +342,16 @@ async function moveFileToFolder(filename, foldername) {
         });
 
     window.location.reload()
+}
+
+function openEditorForFileCreation() {
+    //open monoco editor at #create-file-editor
+    require(["vs/editor/editor.main"], () => {
+        window.editor["create-file-editor"] = monaco.editor.create(document.getElementById("create-file-editor"), {
+          value: "",
+          language: "plaintext",
+          theme: 'vs-light',
+          automaticLayout: true
+        });
+      })
 }
