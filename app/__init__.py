@@ -197,6 +197,8 @@ def search():
     
 @app.route("/upload", methods=["POST"])
 def upload():
+    print(request.form)
+    print(request.files)
     username = request.form["username"]
 
     if username != session["username"]:

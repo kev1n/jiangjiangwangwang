@@ -18,6 +18,10 @@
     />
   </head>
   <body>
+    <div style="visibility:hidden; opacity:0" class="dropzone">
+      <div id="textnode">Drop anywhere!</div>
+
+    </div>
     <!-- navbar -->
     <nav class="navbar bg-light">
       <div class="container-fluid d-flex">
@@ -62,8 +66,7 @@
           <hr>
           <ul class="dropdown-menu">
             <li><a onclick='openEditorForFileCreation()' class="dropdown-item" data-bs-toggle="modal" data-bs-target="#newfile">New File</a></li>
-            <li><a class="dropdown-item" href="#">New Folder</a></li>
-            <li><a class="dropdown-item" href="#">Upload File</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#newfolder" href="#">New Folder</a></li>
           </ul>
         </div>
 
@@ -105,6 +108,49 @@
                 </button>
                 <button
                   onclick='createFile()'
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-dismiss="modal"
+                >
+                  Create new file
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Modal for new folder-->
+        <div
+          id="newfolder"
+          class="modal fade"
+          tabindex="-1"
+          aria-labelledby="newfolderlabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="newfolderlabel">Create new folder</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body overflow-hidden">
+                <input type="text" id="create-folder-name" placeholder="Folder Name" />
+
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  onclick='createDirectory()'
                   type="button"
                   class="btn btn-primary"
                   data-bs-dismiss="modal"
@@ -168,12 +214,6 @@
 
     {% include 'files.html' %}
 
-    <!-- create form for file uploads-->
-    <h2>Upload a file</h2>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-      <input type="file" name="file" id="file" />
-      <button type="submit">Upload</button>
-    </form>
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -201,5 +241,6 @@
     <script src="../static/js/cleanData.js"></script>
     <script src="../static/js/dragging.js"></script>
     <script src="../static/js/dragbar.js"></script>
+    <script src="../static/js/dragndrop.js"></script>
   </body>
 </html>
