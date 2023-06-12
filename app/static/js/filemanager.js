@@ -205,7 +205,8 @@ async function populateModalContents(filename) {
               value: `${jsonData}`,
               language: language,
               theme: 'vs-light',
-              automaticLayout: true
+              automaticLayout: true,
+              fontSize: "18px",
             });
 
             var Socket = window.MozWebSocket || window.WebSocket;
@@ -219,7 +220,7 @@ async function populateModalContents(filename) {
                 useStyle: true,
                 cursorBlink: true,
                 screenKeys: true,
-                automaticLayout: true
+                automaticLayout: true,
             });
 
             var f = new FitAddon.FitAddon();
@@ -331,7 +332,8 @@ function openEditorForFileCreation() {
           value: "",
           language: "plaintext",
           theme: 'vs-light',
-          automaticLayout: true
+          automaticLayout: true,
+          fontSize: "18px",
         });
       })
 }
@@ -352,3 +354,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
         });
     });
   });
+
+
+function populatePDF(filename) {
+    if (filename.split(".")[1] != "pdf") return
+
+    var pdfToCopy = document.getElementById(`pdf-${filename}`)
+
+    var parentToPaste = document.getElementById(`pdf-parent-${filename}`)
+    parentToPaste.appendChild(pdfToCopy)
+}

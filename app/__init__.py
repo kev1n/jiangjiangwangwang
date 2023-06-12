@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, send_file, Response, after_this_request
+from flask import Flask, render_template, request, session, redirect, url_for, send_file, Response, after_this_request
 import fileman
 import os
 import terminal
@@ -221,6 +221,37 @@ def upload():
 
 @app.route("/download/<username>/<filename>", methods=["GET"])
 def download(username, filename):
+    if username != session["username"]:
+        return "Error: You do not have permission to download files"
+    
+    """
+    content = fileman.get_hex(filename, username)
+    file = open(filename, "wb")
+    for i in content:
+        file.write(bytes.fromhex(i))
+    # def generate():
+    #     for i in file:
+    #         yield i
+    # response = Response(generate(), mimetype=mimetypes.guess_type(filename)[0])
+    # response.headers.set("Content-Disposition", "attachment", filename=filename)
+    
+    # # file_path = str(filename)
+    # # os.remove(r""+file_path)
+    # return response
+    file.close()
+    os.remove(filename)
+    """
+
+    bytesfromfile = fileman.download(filename, username)
+    buffer = BytesIO()
+    buffer.write(bytesfromfile)
+    buffer.seek(0)
+
+    return send_file(buffer, as_attachment=True, download_name=filename)
+
+#for some bullshit reason we need two of the same route for both previews.
+@app.route("/downloadpdf/<username>/<filename>", methods=["GET"])
+def downloadpdf(username, filename):
     if username != session["username"]:
         return "Error: You do not have permission to download files"
     

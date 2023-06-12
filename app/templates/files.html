@@ -16,16 +16,25 @@
           ><b>{{i}}</b></a
         >
         <ul class="dropdown-menu">
-            <!--Edit-->
+          <!--Edit-->
           <li>
+            <!--If the file is an image or a pdf, then view it instead-->
+            {% if i.endswith(".pdf") or i.endswith(".PDF") or
+            i.endswith(".png") or i.endswith(".jpg") or i.endswith(".jpeg") or
+            i.endswith(".gif") or i.endswith(".svg") or i.endswith("PNG") or
+            i.endswith("JPG") or i.endswith("JPEG") or i.endswith("GIF") or
+            i.endswith("SVG") %}
+            <a class="dropdown-item"
+            data-bs-toggle="modal"
+            data-bs-target="#modal-{{i}}">View File</a>{% else %}
             <a
               onclick='populateModalContents("{{i}}")'
               class="dropdown-item"
               data-bs-toggle="modal"
               data-bs-target="#modal-{{i}}"
-            >
-              Edit
-            </a>
+            >Edit File</a>{% endif %}
+            
+              
           </li>
           <!--Download-->
           <li>
@@ -37,8 +46,8 @@
               >Download</a
             >
           </li>
-           <!--Rename-->
-           <li>
+          <!--Rename-->
+          <li>
             <a
               data-bs-toggle="modal"
               data-bs-target="#rename-{{i}}"
@@ -47,38 +56,43 @@
               Rename
             </a>
           </li>
-            <!--Delete-->
+          <!--Delete-->
           <li>
             <a class="dropdown-item" onclick='deleteFile("{{i}}")'>Delete</a>
           </li>
-         
         </ul>
       </div>
-      {% if i.endswith(".pdf") %}
-        <div class="card-body overflow-auto" style="max-height: 150px" >
-          <object style="height: 100%; width:100%;" data='/download/{{username}}/{{i}}'></object>
-        </div>
-        <!--Embed images in a img tag-->
-        {% elif i.endswith(".png") or
-        i.endswith(".jpg") or 
-        i.endswith(".jpeg") or 
-        i.endswith(".gif") or 
-        i.endswith(".svg") or
-        i.endswith("PNG") or
-        i.endswith("JPG") or
-        i.endswith("JPEG") or
-        i.endswith("GIF") or
-        i.endswith("SVG")
+      {% if i.endswith(".pdf") or i.endswith(".PDF") %}
+      <div class="card-body overflow-auto" style="max-height: 150px">
+        
+        <object
+          style="height: 100%; width: 100%"
+          data="/download/{{username}}/{{i}}"
+        ></object>
+        
+          
+        
+        
+      </div>
+      <!--Embed images in a img tag-->
+      {% elif i.endswith(".png") or i.endswith(".jpg") or i.endswith(".jpeg") or
+      i.endswith(".gif") or i.endswith(".svg") or i.endswith("PNG") or
+      i.endswith("JPG") or i.endswith("JPEG") or i.endswith("GIF") or
+      i.endswith("SVG") %}
 
-        %}
-
-        <img class="card-img-bottom overflow-auto" style="max-height: 150px" src='/download/{{username}}/{{i}}' alt='{{i}}' />
+      <img
+        class="card-img-bottom overflow-auto"
+        style="max-height: 150px"
+        src="/download/{{username}}/{{i}}"
+        alt="{{i}}"
+      />
       {% else %}
-        <div class="card-body textfile overflow-auto p-1" style="max-height: 150px" filename="{{i}}">
-
-        </div>
+      <div
+        class="card-body textfile overflow-auto p-1"
+        style="max-height: 150px"
+        filename="{{i}}"
+      ></div>
       {% endif %}
-
     </div>
     <!-- Renaming Modal -->
     <div
@@ -138,10 +152,20 @@
       <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="modal-{{i}}Label">Edit {{i}}</h5>
-            <button onclick='runCode("{{i}}")' id="run-{{i}}">
-              Save and Run
-            </button>
+            <h5 class="modal-title" id="modal-{{i}}Label">
+              {% if i.endswith(".pdf") or i.endswith(".PDF") or
+              i.endswith(".png") or i.endswith(".jpg") or i.endswith(".jpeg") or
+              i.endswith(".gif") or i.endswith(".svg") or i.endswith("PNG") or
+              i.endswith("JPG") or i.endswith("JPEG") or i.endswith("GIF") or
+              i.endswith("SVG") %} Viewing {% else %} Editing
+              
+              <button onclick='runCode("{{i}}")' id="run-{{i}}">
+                Save and Run
+              </button>
+              {% endif %}
+              {{i}}
+            </h5>
+
             <button
               type="button"
               class="btn-close"
@@ -150,6 +174,26 @@
             ></button>
           </div>
           <div class="modal-body overflow-hidden">
+            {% if i.endswith(".png") or i.endswith(".jpg") or
+            i.endswith(".jpeg") or i.endswith(".gif") or i.endswith(".svg") or
+            i.endswith("PNG") or i.endswith("JPG") or i.endswith("JPEG") or
+            i.endswith("GIF") or i.endswith("SVG") or i.endswith(".pdf") or i.endswith(".PDF") %}
+
+            {% if i.endswith(".pdf") or i.endswith(".PDF") %}
+            
+              <object
+                style="height: 100%; width: 100%"
+                data="/downloadpdf/{{username}}/{{i}}"
+              ></object>
+            <!--Embed images in a img tag-->
+            {% else %}
+
+            <img
+              src="/download/{{username}}/{{i}}"
+              alt="{{i}}"
+            />
+            {% endif %}
+            {% else %}
             <!--We put the contents of the file in this textarea-->
             <div class="root">
               <div
@@ -160,12 +204,13 @@
               <!--We put the terminal in this div-->
               <div style="width: 400px; height: 100%">
                 <div
-                    class="terminal"
+                  class="terminal"
                   id="modal-{{i}}-terminal"
                   style="border: 1px solid black; height: 100%"
                 ></div>
               </div>
             </div>
+            {% endif %}
           </div>
           <div class="modal-footer">
             <button
@@ -175,6 +220,10 @@
             >
               Close
             </button>
+            {% if i.endswith(".png") or i.endswith(".jpg") or
+            i.endswith(".jpeg") or i.endswith(".gif") or i.endswith(".svg") or
+            i.endswith("PNG") or i.endswith("JPG") or i.endswith("JPEG") or
+            i.endswith("GIF") or i.endswith("SVG") %} {% else %}
             <button
               onclick='editFile("{{i}}")'
               type="button"
@@ -183,6 +232,7 @@
             >
               Save changes
             </button>
+            {% endif %}
           </div>
         </div>
       </div>
