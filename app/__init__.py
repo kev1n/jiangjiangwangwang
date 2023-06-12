@@ -8,6 +8,7 @@ from flask.sessions import session_json_serializer
 from hashlib import sha1
 import json
 import requests
+import time
 
 app = Flask(__name__)
 app.secret_key = os.urandom(50).hex()
@@ -241,7 +242,7 @@ def download(username, filename):
     """
 
     fileman.download(filename, username)
-
+    time.sleep(5)
     @after_this_request
     def remove_file(response):
         try:
