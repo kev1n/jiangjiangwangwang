@@ -342,13 +342,24 @@ window.addEventListener('DOMContentLoaded', (event) => {
       fetch(`/download/${username}/${file.getAttribute("filename")}`)
         .then(response => response.text())
         .then(text => {
-          file.innerHTML = text;
+            if (hasUnicode(text)) {
+                text = "This file contains unicode characters and cannot be displayed"
+            }
+
+            file.innerHTML = text;
         })
         .catch(error => {
           console.error('Error:', error);
         });
     });
   });
+
+function hasUnicode (str) {
+    for (var i = 0; i < str.length; i++) {
+        if (str.charCodeAt(i) > 127) return true;
+    }
+    return false;
+}
 
 
 function populatePDF(filename) {

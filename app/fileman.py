@@ -121,10 +121,14 @@ def upload(filename, username, content):
 def download(filename, username):
     ftp_client= clients[username].open_sftp()
     content = ""
-    with ftp_client.open(client_directory[username]+r"/"+filename) as f:
-        content = f.read()
-        f.close()
-    ftp_client.close()
+    try:
+        with ftp_client.open(client_directory[username]+r"/"+filename) as f:
+            content = f.read()
+            f.close()
+        ftp_client.close()
+    except PermissionError:
+        ftp_client.close()
+        return b"Permission Denied"
     return content
 
 

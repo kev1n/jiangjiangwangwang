@@ -29,8 +29,6 @@ $(".searchbar").select2({
         var data = data.slice(0, data.length-filenamelength);
     }
     
-
-
     $.ajax({
         url: "/cd",
         type: "POST",
