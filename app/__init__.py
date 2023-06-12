@@ -8,7 +8,6 @@ from flask.sessions import session_json_serializer
 from hashlib import sha1
 import json
 import requests
-import time
 from io import BytesIO
 
 app = Flask(__name__)
@@ -189,13 +188,55 @@ def search():
         return "Error: You do not have permission to delete this file"
     
     filename = request.form["filename"]
-    files = fileman.search(filename, username)
+    folders, files = fileman.search(filename, username)
 
-    #get rid of new line at the end of each file because it messes up the html
+
+    """ get data into this format
+    {
+  "results": [
+    {
+      "id": 1,
+      "text": "Option 1"
+      "file": True
+    },
+    {
+      "id": 2,
+      "text": "Option 2"
+      "file": False
+    }
+  ],
+  "pagination": {
+    "more": true
+  }
+}
+    """
+
+    
+
+    results = {"results": []}
+
+    index = 0
     for i in range(len(files)):
-        files[i] = files[i][:-1]
+        file = files[index][:-1]
+        results["results"].append({"id": index + 1, "text": file, "file": True, "slashes": file.count("/")})
+        index += 1
 
-    return render_template("search.html", username = session["username"], filename=filename, files=files)
+    for i in range(len(folders)):
+        folder = folders[i][:-1]
+        results["results"].append({"id": index + 1, "text": folder, "file": False, "slashes": folder.count("/")})
+        index += 1
+    results["results"].sort(key=lambda x: x["slashes"], reverse=False)
+
+    #change the indexes now that the list is sorted
+    for i in range(len(results["results"])):
+        results["results"][i]["id"] = i + 1
+
+    
+    print(results["results"])
+
+    
+
+    return results
     
 @app.route("/upload", methods=["POST"])
 def upload():

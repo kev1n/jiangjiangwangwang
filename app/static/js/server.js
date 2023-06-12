@@ -57,7 +57,7 @@ function openTerminal() {
         socket.onopen = function() {
         var term = new Terminal({
             cols: 100,
-            rows: 50,
+            rows: 150,
             convertEol: true,
             useStyle: true,
             cursorBlink: true,

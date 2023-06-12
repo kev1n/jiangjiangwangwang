@@ -17,6 +17,9 @@
     "
       rel="stylesheet"
     />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Option 1: Include in HTML -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
   </head>
   <body>
     <div style="visibility:hidden; opacity:0" class="dropzone">
@@ -27,6 +30,7 @@
     <nav class="navbar bg-light">
       <div class="container-fluid d-flex">
         <a class="navbar-brand" href="#">
+          
           <img
             src="https://img.freepik.com/free-icon/rubber-duck_318-763202.jpg"
             class="logo"
@@ -34,12 +38,7 @@
           Drive
         </a>
         <form class="d-flex w-50">
-          <input
-            class="form-control rounded"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
+          <select class="form-control rounded searchbar"></select>
         </form>
         <div class="rounded p-1">{{username}}</div>
       </div>
@@ -204,17 +203,8 @@
     <p style="display: none" id="username">{{username}}</p>
     <p style="display: none" id="current-path">{{currentPath}}</p>
 
-    <!--Search form-->
-    <h1>Search for a file</h1>
-    <form action="/search" method="POST">
-      <label for="filename">Filename</label>
-      <input type="text" id="filename" name="filename" placeholder="Search" />
-      <button type="submit">Search</button>
-    </form>
-    <h1>Files</h1>
-
-    {% include 'files.html' %}
-
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -243,5 +233,6 @@
     <script src="../static/js/dragging.js"></script>
     <script src="../static/js/dragbar.js"></script>
     <script src="../static/js/dragndrop.js"></script>
+    <script src="../static/js/search.js"></script>
   </body>
 </html>

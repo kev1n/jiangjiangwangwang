@@ -99,10 +99,11 @@ def delete_directory(directoryname, username):
     return ssh_stdout.readlines()
 
 def search(filename, username):
-
-    ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; find ~ -name {filename} 2>/dev/null")
-
-    return ssh_stdout.readlines()
+    #folders
+    ssh_stdin, ssh_stdout_folders, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; find . -iname '*{filename}*' -type d 2>/dev/null")
+    #files
+    ssh_stdin, ssh_stdout_files, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; find . -iname '*{filename}*' -type f 2>/dev/null")
+    return [ssh_stdout_folders.readlines(), ssh_stdout_files.readlines()]
 
 def upload(filename, username, content):
     # print(filename)

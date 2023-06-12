@@ -157,13 +157,15 @@
               i.endswith(".png") or i.endswith(".jpg") or i.endswith(".jpeg") or
               i.endswith(".gif") or i.endswith(".svg") or i.endswith("PNG") or
               i.endswith("JPG") or i.endswith("JPEG") or i.endswith("GIF") or
-              i.endswith("SVG") %} Viewing {% else %} Editing
+              i.endswith("SVG") %} Viewing {% else %} Editing {{i}}
               
+              <!--If the file is a java file or a python file then enable running code-->
+              {% if i.endswith(".java") or i.endswith(".py") %}
               <button onclick='runCode("{{i}}")' id="run-{{i}}">
                 Save and Run
               </button>
               {% endif %}
-              {{i}}
+              {% endif %}
             </h5>
 
             <button
@@ -201,14 +203,17 @@
                 id="modal-{{i}}-contents"
                 style="border: 1px solid black; height: 100%"
               ></div>
-              <!--We put the terminal in this div-->
-              <div style="width: 400px; height: 100%">
-                <div
-                  class="terminal"
-                  id="modal-{{i}}-terminal"
-                  style="border: 1px solid black; height: 100%"
-                ></div>
-              </div>
+              {% if i.endswith(".java") or i.endswith(".py") %}
+                  <!--We put the terminal in this div-->
+                  <div style="width: 400px; height: 100%">
+                    <div
+                      class="terminal"
+                      id="modal-{{i}}-terminal"
+                      style="border: 1px solid black; height: 100%"
+                    ></div>
+                  </div>
+              {% endif %}
+
             </div>
             {% endif %}
           </div>

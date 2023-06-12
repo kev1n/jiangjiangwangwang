@@ -214,13 +214,10 @@ async function populateModalContents(filename) {
             sockets[filename] = socket
             socket.onopen = async function() {
             var term = new Terminal({
-                cols: 100,
-                rows: 50,
                 convertEol: true,
                 useStyle: true,
                 cursorBlink: true,
                 screenKeys: true,
-                automaticLayout: true,
             });
 
             var f = new FitAddon.FitAddon();
@@ -246,8 +243,6 @@ async function populateModalContents(filename) {
             
             term.finishedLoading = false
             socket.onmessage = function(event) {
-                console.log(event.data)
-                console.log(event.data.includes(username))
                 term.write(event.data);
                 if (!term.finishedLoading && event.data.includes(username)) {
                     term.finishedLoading = true
