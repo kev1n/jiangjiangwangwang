@@ -1,28 +1,6 @@
 const username = document.getElementById("username").innerHTML
 
 
-async function getContentsOfFile(filename) {
-    //query /getFileData with get request, username and filename in querystring
-
-    const body = {
-        username: username,
-        filename: filename
-    }
-    const response = await fetch(`/getFileData`, 
-        {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }, 
-            body: JSON.stringify(body)
-        }
-    );
-    let jsonData = await response.json();
-    jsonData = jsonData.join("")
-    alert(jsonData);
-}
-
 async function changeDirectory(directory) {
     //query /cd with get request, username and directory in querystring
 
@@ -357,3 +335,20 @@ function openEditorForFileCreation() {
         });
       })
 }
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    const files = Array.from(document.getElementsByClassName("textfile"));
+    
+    // Iterate over the files
+    files.forEach(file => {
+      // Fetch the TXT file
+      fetch(`/download/${username}/${file.getAttribute("filename")}`)
+        .then(response => response.text())
+        .then(text => {
+          file.innerHTML = text;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+  });

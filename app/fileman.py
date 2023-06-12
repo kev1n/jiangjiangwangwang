@@ -119,7 +119,8 @@ def upload(filename, username, content):
 
 def download(filename, username):
     ftp_client= clients[username].open_sftp()
-    ftp_client.get(client_directory[username]+r"/"+filename, "./"+filename)
+    
+    ftp_client.get(client_directory[username]+r"/"+filename, f"./temp/{filename}")
     ftp_client.close()
 
 

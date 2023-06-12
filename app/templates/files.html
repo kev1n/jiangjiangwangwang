@@ -54,11 +54,31 @@
          
         </ul>
       </div>
-      <img
-        src="https://img.freepik.com/free-icon/rubber-duck_318-763202.jpg"
-        class="card-img-bottom img-thumbnail"
-        alt="..."
-      />
+      {% if i.endswith(".pdf") %}
+        <div class="card-body overflow-auto" style="max-height: 150px" >
+          <object style="height: 100%; width:100%;" data='/download/{{username}}/{{i}}'></object>
+        </div>
+        <!--Embed images in a img tag-->
+        {% elif i.endswith(".png") or
+        i.endswith(".jpg") or 
+        i.endswith(".jpeg") or 
+        i.endswith(".gif") or 
+        i.endswith(".svg") or
+        i.endswith("PNG") or
+        i.endswith("JPG") or
+        i.endswith("JPEG") or
+        i.endswith("GIF") or
+        i.endswith("SVG")
+
+        %}
+
+        <img class="card-img-bottom overflow-auto" style="max-height: 150px" src='/download/{{username}}/{{i}}' alt='{{i}}' />
+      {% else %}
+        <div class="card-body textfile overflow-auto p-1" style="max-height: 150px" filename="{{i}}">
+
+        </div>
+      {% endif %}
+
     </div>
     <!-- Renaming Modal -->
     <div
@@ -167,7 +187,7 @@
         </div>
       </div>
     </div>
-    <object data='{{url_for("download", username=username, filename=i)}}'></object>
+
     {% endfor %}
   </div>
 </div>

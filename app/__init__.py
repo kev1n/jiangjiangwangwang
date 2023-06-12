@@ -218,7 +218,7 @@ def upload():
 
     return "Success"
 
-@app.route("/download/<username>/<filename>", methods=["GET","POST"])
+@app.route("/download/<username>/<filename>", methods=["GET"])
 def download(username, filename):
     if username != session["username"]:
         return "Error: You do not have permission to download files"
@@ -242,16 +242,18 @@ def download(username, filename):
     """
 
     fileman.download(filename, username)
-    time.sleep(5)
+    
     @after_this_request
     def remove_file(response):
         try:
-            os.remove(filename)
+            print("removing")
+            time.sleep(1)
+            os.remove(f"./temp/{filename}")
         except Exception as error:
             app.logger.error("Error removing or closing downloaded file handle", error)
         return response
     
-    return send_file(filename, as_attachment=True)
+    return send_file(f"./temp/{filename}", as_attachment=True)
 
 @app.route("/moveFileToFolder", methods=["POST"])
 def moveFileToFolder():
