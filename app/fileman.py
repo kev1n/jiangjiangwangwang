@@ -108,20 +108,24 @@ def upload(filename, username, content):
     # print(filename)
     # ssh_stdin, ssh_stdout, ssh_stderr = clients[username].exec_command(f"cd {client_directory[username]}; echo '{content}' > temp && xxd -r -p temp > '{filename}'; rm temp")
     ftp_client= clients[username].open_sftp()
-    localtemp = open(filename, "wb")
+    localtemp = open(f"./temp/{filename}", "wb")
     localtemp.write(content)
     localtemp.close()
 
-    ftp_client.put("./"+filename, client_directory[username]+r"/"+filename)
-    os.remove(filename)
+    ftp_client.put(f"./temp/{filename}", client_directory[username]+r"/"+filename)
+    os.remove(f"./temp/{filename}")
     ftp_client.close()
     #return ssh_stdout.readlines()
 
 def download(filename, username):
     ftp_client= clients[username].open_sftp()
-    
-    ftp_client.get(client_directory[username]+r"/"+filename, f"./temp/{filename}")
+    content = ""
+    with ftp_client.open(client_directory[username]+r"/"+filename) as f:
+        content = f.read()
+        f.close()
     ftp_client.close()
+    return content
+
 
 
 def get_hex(filename, username):

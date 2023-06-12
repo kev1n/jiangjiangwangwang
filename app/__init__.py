@@ -9,6 +9,7 @@ from hashlib import sha1
 import json
 import requests
 import time
+from io import BytesIO
 
 app = Flask(__name__)
 app.secret_key = os.urandom(50).hex()
@@ -241,19 +242,12 @@ def download(username, filename):
     os.remove(filename)
     """
 
-    fileman.download(filename, username)
-    
-    @after_this_request
-    def remove_file(response):
-        try:
-            print("removing")
-            time.sleep(1)
-            os.remove(f"./temp/{filename}")
-        except Exception as error:
-            app.logger.error("Error removing or closing downloaded file handle", error)
-        return response
-    
-    return send_file(f"./temp/{filename}", as_attachment=True)
+    bytesfromfile = fileman.download(filename, username)
+    buffer = BytesIO()
+    buffer.write(bytesfromfile)
+    buffer.seek(0)
+
+    return send_file(buffer, as_attachment=True, download_name=filename)
 
 @app.route("/moveFileToFolder", methods=["POST"])
 def moveFileToFolder():
